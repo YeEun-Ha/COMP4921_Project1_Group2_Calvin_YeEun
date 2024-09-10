@@ -11,8 +11,7 @@
     "start": "remix-serve ./build/server/index.js",
     "start-server": "cross-env NODE_ENV=production node ./app/server/server.js"
   },
-  "dependencies": {
-    "@remix-run/node": "^2.11.2",
+  "dependencies": { "@remix-run/node": "^2.11.2",
     "@remix-run/react": "^2.11.2",
     "@remix-run/serve": "^2.11.2",
     "isbot": "^4.1.0",
