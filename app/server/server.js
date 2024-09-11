@@ -1,18 +1,22 @@
+
 import { createRequestHandler } from "@remix-run/express";
 import express from "express";
-import * as session from "express-session" 
-import * as bcrypt from "bcrypt"
-import * as MongoStore from "connect-mongo"
+import session from "express-session" 
+import bcrypt from "bcrypt"
+import MongoStore from "connect-mongo"
+import dotenv from "dotenv"
+import { router } from "./apiRoutes/apiRoutes.js"
+
+dotenv.config()
 
 const saltRounds = 12;
 
-const database = include('databaseConnection');
-const db_utils = include('database/db_utils');
-const db_users = include('database/users');
-const success = db_utils.printMySQLVersion();
+// const database = include('databaseConnection');
+// const db_utils = include('database/db_utils');
+// const db_users = include('database/users');
+// const success = db_utils.printMySQLVersion();
 
-const PORT = process.env.PORT || 3030;
-
+const PORT = process.env.PORT
 const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour  (hours * minutes * seconds * millis)
 
 const mongodb_user = process.env.MONGODB_USER;
@@ -39,14 +43,17 @@ app.use(
 );
 
 
-app.use(session({ 
-    secret: node_session_secret,
-	store: mongoStore, //default is memory store 
-	saveUninitialized: false, 
-	resave: true    
-}
-));
-
+// app.use(session({ 
+//   secret: node_session_secret,
+//   store: MongoStore.create({
+//     mongoUrl: `mongodb://${mongodb_user}:${mongodb_password}@localhost:27017/sessions`, // update with your actual MongoDB connection string
+//     ttl: 14 * 24 * 60 * 60, // Sessions will expire after 14 days (in seconds)
+//   }), //default is memory store 
+//   saveUninitialized: false, 
+//   resave: true    
+// }
+// ));
+//
 const build = viteDevServer
   ? () =>
       viteDevServer.ssrLoadModule(
@@ -55,6 +62,7 @@ const build = viteDevServer
   : await import("./build/server/index.js");
 
 
+app.use('/api', router())
 app.post('/submitUser', async (req,res) => {
     var username = req.body.username;
     var password = req.body.password;

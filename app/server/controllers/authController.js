@@ -1,4 +1,4 @@
-const postLogin = async () => {
+export const postLogin = async (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var results = await db_users.getUser({ user: username, hashedPassword: password });
