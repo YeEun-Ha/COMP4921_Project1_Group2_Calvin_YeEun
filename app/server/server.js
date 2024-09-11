@@ -63,6 +63,7 @@ const build = viteDevServer
 
 
 app.use('/api', router())
+
 app.post('/submitUser', async (req,res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -72,12 +73,8 @@ app.post('/submitUser', async (req,res) => {
     if (success) {
         res.redirect('/');
     } else {
-        var html = `
-        <h1 style='color:red'>Error!</h1>
-        <div>Failed to create user.</div>
-        `
-        res.send(html);
-        // res.render("errorMessage", {error: "Failed to create user."} );
+        res.status(404)
+        res.json({success: false, message: "Error creating new user"});
     }
 });
 
