@@ -6,6 +6,7 @@ import bcrypt from "bcrypt"
 import MongoStore from "connect-mongo"
 import dotenv from "dotenv"
 import { router } from "./apiRoutes/apiRoutes.js"
+import database from './databaseConnection.js'
 
 dotenv.config()
 
@@ -63,49 +64,6 @@ const build = viteDevServer
 
 
 app.use('/api', router())
-
-app.post('/submitUser', async (req,res) => {
-    var username = req.body.username;
-    var password = req.body.password;
-    var hashedPassword = bcrypt.hashSync(password, saltRounds);
-
-    var success = await db_users.createUser({ user: username, hashedPassword: hashedPassword });
-    if (success) {
-        res.redirect('/');
-    } else {
-        res.status(404)
-        res.json({success: false, message: "Error creating new user"});
-    }
-});
-
-app.post('/login', async (req,res) => {
-    var username = req.body.username;
-    var password = req.body.password;
-    var results = await db_users.getUser({ user: username, hashedPassword: password });
-
-    if (results) {
-        if (results.length == 1) { //there should only be 1 user in the db that matches
-            if (bcrypt.compareSync(password, results[0].password)) {
-                req.session.authenticated = true;
-                req.session.username = username;
-                // req.session.user_type = results[0].type;
-                req.session.cookie.maxAge = expireTime;
-                res.redirect('/loggedIn');
-                return;
-            }
-            else{
-                console.log("invalid password");
-            }
-        } else {
-            console.log('invalid number of users matched: '+results.length+" (expected 1).");
-            res.redirect('/login?badlogin=1');
-            return;            
-        }
-    }
-    //user and password combination not found
-    console.log('user not found');
-    // res.redirect("/login?badlogin=1");
-});
 
 app.all("*", createRequestHandler({ build }));
 
