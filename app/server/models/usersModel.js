@@ -1,4 +1,4 @@
-const database = include('databaseConnection');
+import database from '../database/index.js'
 
 async function createUser(postData) {
 	let createUserSQL = `
