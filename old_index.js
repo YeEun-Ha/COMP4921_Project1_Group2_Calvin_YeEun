@@ -150,6 +150,28 @@ app.get('/loggedin', (req,res) => {
 });
 
 
+app.get('/mainDisplay', (req, res) => {
+    var html = ` Filter: 
+    <button>links</button>
+    <button>Images</button>
+    <button>Text</button>
+    <button>Create a new posting</button>
+    <table>
+        <tr>
+            <th>TEXT</th>
+            <th>Short URL</th>
+            <th>Hits</th>
+            <th>Active</th>
+            <th>Created</th>
+            <th>Last Hit</th>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+    </table>`
+    res.send(html);
+})
+
 
 
 app.use(express.static(__dirname + "/public"));
