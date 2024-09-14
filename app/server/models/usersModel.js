@@ -79,4 +79,21 @@ async function getUser(postData) {
 	}
 }
 
-module.exports = {createUser, getUsers, getUser};
+async function getTexts() {
+	const ourTableName = 'texts'
+	let getData = `
+        SELECT content, short_url, hits, active, created, last_hit 
+        FROM ${ourTableName} ;
+        `
+	try {
+		const results = await database.query(getData);
+
+		console.log("Successfully retrieved text data")
+		console.log(results);
+		return results
+	} catch (err) {
+		console.error('Error fetching data from MySQL:', err);
+	}
+}
+
+module.exports = {createUser, getUsers, getUser, getTexts};

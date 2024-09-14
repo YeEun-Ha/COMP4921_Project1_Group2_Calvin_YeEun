@@ -150,27 +150,49 @@ app.get('/loggedin', (req,res) => {
 });
 
 
-app.get('/mainDisplay', (req, res) => {
-    var html = ` Filter: 
-    <button>links</button>
-    <button>Images</button>
-    <button>Text</button>
-    <button>Create a new posting</button>
-    <table>
-        <tr>
-            <th>TEXT</th>
+app.get('/mainDisplay', async (req, res) => {
+    try{
+        let tableRows = '';
+        var [texts] = await db_users.getTexts();
+    
+        texts.forEach(text => {
+            tableRows += `
+                <tr>
+                    <td>${text.content}</td>
+                    <td>${text.short_url}</td>
+                    <td>${text.hits}</td>
+                    <td>${text.active}</td>
+                    <td>${text.created}</td>
+                    <td>${text.last_hit}</td>
+                </tr>
+            `;
+        });
+    
+        var html = `
+        Filter: 
+        <button>Links</button>
+        <button>Images</button>
+        <button>Text</button>
+        <button>Create a new posting</button>
+        <table>
+          <tr>
+            <th>Content</th>
             <th>Short URL</th>
             <th>Hits</th>
             <th>Active</th>
             <th>Created</th>
             <th>Last Hit</th>
-        </tr>
-        <tr>
-            <td></td>
-        </tr>
-    </table>`
-    res.send(html);
-})
+          </tr>
+          ${tableRows}
+        </table>
+        `;
+    
+        res.send(html);
+    } catch (error) {
+        console.error('Error fetching data from MySQL:', error);
+        // res.status(500).send('Internal Server Error');
+    }
+});
 
 
 
