@@ -6,13 +6,13 @@ import {
     ScrollRestoration,
 } from '@remix-run/react';
 import './tailwind.css';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
 import Navbar from './components/common/navbar';
 
 export function Layout({ children }) {
     return (
-        <html lang='en'>
+        <html lang='en' data-mantine-color-scheme='light'>
             <head>
                 <meta charSet='utf-8' />
                 <meta
@@ -21,6 +21,7 @@ export function Layout({ children }) {
                 />
                 <Meta />
                 <Links />
+                <ColorSchemeScript />
             </head>
             <body>
                 {children}
