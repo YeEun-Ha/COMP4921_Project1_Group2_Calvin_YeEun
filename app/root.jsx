@@ -6,9 +6,10 @@ import {
     ScrollRestoration,
 } from '@remix-run/react';
 import './tailwind.css';
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, Flex } from '@mantine/core';
 import '@mantine/core/styles.css';
 import Navbar from './components/common/navbar';
+import Footer from './components/common/footer';
 
 export function Layout({ children }) {
     return (
@@ -35,8 +36,13 @@ export function Layout({ children }) {
 export default function App() {
     return (
         <MantineProvider>
-            <Navbar />
-            <Outlet />{' '}
+            <Flex direction='column' style={{ minHeight: '100vh' }}>
+                <Navbar />
+                <div style={{ flexGrow: 1 }}>
+                    <Outlet />{' '}
+                </div>
+            </Flex>
+            <Footer />
         </MantineProvider>
     );
 }
