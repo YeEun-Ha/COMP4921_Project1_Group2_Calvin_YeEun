@@ -1,14 +1,5 @@
-export const meta = () => {
-    return [
-        { title: 'New Remix App' },
-        { name: 'description', content: 'Welcome to Remix!' },
-    ];
-};
+import HomePage from '../components/home';
 
 export default function Index() {
-    return (
-        <div className='font-sans p-4'>
-            <h1 className='text-3xl'>Login</h1>
-        </div>
-    );
+    return <HomePage />;
 }
