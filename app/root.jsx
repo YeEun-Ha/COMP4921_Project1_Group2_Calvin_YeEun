@@ -12,7 +12,7 @@ import Navbar from './components/common/navbar';
 
 export function Layout({ children }) {
     return (
-        <html lang='en' data-mantine-color-scheme='light'>
+        <html lang='en'>
             <head>
                 <meta charSet='utf-8' />
                 <meta
@@ -34,11 +34,9 @@ export function Layout({ children }) {
 
 export default function App() {
     return (
-        <MantineProvider withGlobalStyles withNormalizeCSS>
-            <Layout>
-                <Navbar />
-                <Outlet />
-            </Layout>
+        <MantineProvider>
+            <Navbar />
+            <Outlet />{' '}
         </MantineProvider>
     );
 }

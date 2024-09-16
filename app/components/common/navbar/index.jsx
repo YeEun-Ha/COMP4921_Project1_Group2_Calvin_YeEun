@@ -1,3 +1,4 @@
+import { useNavigate, Link } from '@remix-run/react';
 import {
     HoverCard,
     Group,
@@ -29,42 +30,9 @@ import {
 } from '@tabler/icons-react';
 import classes from './navbar.module.css';
 
-export const loader = async () => {
+const loader = async () => {
     return null;
 };
-
-const mockdata = [
-    {
-        icon: IconCode,
-        title: 'Open source',
-        description: 'This Pokémon’s cry is very loud and distracting',
-    },
-    {
-        icon: IconCoin,
-        title: 'Free for everyone',
-        description: 'The fluid of Smeargle’s tail secretions changes',
-    },
-    {
-        icon: IconBook,
-        title: 'Documentation',
-        description: 'Yanma is capable of seeing 360 degrees without',
-    },
-    {
-        icon: IconFingerprint,
-        title: 'Security',
-        description: 'The shell’s rounded shape and the grooves on its.',
-    },
-    {
-        icon: IconChartPie3,
-        title: 'Analytics',
-        description: 'This Pokémon uses its flying ability to quickly chase',
-    },
-    {
-        icon: IconNotification,
-        title: 'Notifications',
-        description: 'Combusken battles with the intensely hot flames it spews',
-    },
-];
 
 export default function Navbar() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -72,38 +40,33 @@ export default function Navbar() {
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
 
-    const links = mockdata.map((item) => (
-        <UnstyledButton className={classes.subLink} key={item.title}>
-            <Group wrap='nowrap' align='flex-start'>
-                <ThemeIcon size={34} variant='default' radius='md'>
-                    <item.icon
-                        style={{ width: rem(22), height: rem(22) }}
-                        color={theme.colors.blue[6]}
-                    />
-                </ThemeIcon>
-                <div>
-                    <Text size='sm' fw={500}>
-                        {item.title}
-                    </Text>
-                    <Text size='xs' c='dimmed'>
-                        {item.description}
-                    </Text>
-                </div>
-            </Group>
-        </UnstyledButton>
-    ));
+    const navigate = useNavigate();
+
+    const handleLoginNavigate = () => {
+        console.log('LOGGED');
+        navigate('/login');
+    };
 
     return (
         <Box pb={20}>
             <header className={classes.header}>
                 <Group justify='space-between' h='100%'>
                     <Group h='100%' gap={0} visibleFrom='sm'>
-                        <h1>Calvin & YeEun's Project I</h1>
+                        <h3>Calvin & YeEun's Projsect I</h3>
                     </Group>
-                    <Group h='100%' gap={0} visibleFrom='sm'>
-                        <a href='#' className={classes.link}>
+                    <Group h='100%' gap={1} visibleFrom='sm'>
+                        <a href='/' className={classes.link}>
                             Home
                         </a>
+
+                        <a href='/dashboard' className={classes.link}>
+                            Dashboard
+                        </a>
+
+                        <a href='/settings' className={classes.link}>
+                            Settings
+                        </a>
+                        {/*
                         <HoverCard
                             width={600}
                             position='bottom'
@@ -138,9 +101,7 @@ export default function Navbar() {
 
                                 <Divider my='sm' />
 
-                                <SimpleGrid cols={2} spacing={0}>
-                                    {links}
-                                </SimpleGrid>
+                                <SimpleGrid cols={2} spacing={0}></SimpleGrid>
 
                                 <div className={classes.dropdownFooter}>
                                     <Group justify='space-between'>
@@ -159,18 +120,16 @@ export default function Navbar() {
                                     </Group>
                                 </div>
                             </HoverCard.Dropdown>
-                        </HoverCard>
-                        <a href='#' className={classes.link}>
-                            Learn
-                        </a>
-                        <a href='#' className={classes.link}>
-                            Academy
-                        </a>
+                        </HoverCard> */}
                     </Group>
 
-                    <Group visibleFrom='sm'>
-                        <Button variant='default'>Log in</Button>
-                        <Button>Sign up</Button>
+                    <Group>
+                        <Button variant='default' component={Link} to='/login'>
+                            Log in
+                        </Button>
+                        <Button component={Link} to='/signup'>
+                            Sign up
+                        </Button>
                     </Group>
 
                     <Burger
@@ -193,9 +152,18 @@ export default function Navbar() {
                 <ScrollArea h={`calc(100vh - ${rem(80)})`} mx='-md'>
                     <Divider my='sm' />
 
-                    <a href='#' className={classes.link}>
+                    <a href='/' className={classes.link}>
                         Home
                     </a>
+
+                    <a href='/dashboard' className={classes.link}>
+                        Dashboard
+                    </a>
+
+                    <a href='/settings' className={classes.link}>
+                        Settings
+                    </a>
+                    {/*
                     <UnstyledButton
                         className={classes.link}
                         onClick={toggleLinks}
@@ -210,19 +178,25 @@ export default function Navbar() {
                             />
                         </Center>
                     </UnstyledButton>
-                    <Collapse in={linksOpened}>{links}</Collapse>
-                    <a href='#' className={classes.link}>
-                        Learn
-                    </a>
-                    <a href='#' className={classes.link}>
-                        Academy
-                    </a>
-
+                    {/* <Collapse in={linksOpened}>{links}</Collapse> */}
                     <Divider my='sm' />
 
                     <Group justify='center' grow pb='xl' px='md'>
-                        <Button variant='default'>Log in</Button>
-                        <Button>Sign up</Button>
+                        <Button
+                            onClick={closeDrawer}
+                            variant='default'
+                            component={Link}
+                            to='/login'
+                        >
+                            Log in
+                        </Button>
+                        <Button
+                            onClick={closeDrawer}
+                            component={Link}
+                            to='/signup'
+                        >
+                            Sign up
+                        </Button>
                     </Group>
                 </ScrollArea>
             </Drawer>
