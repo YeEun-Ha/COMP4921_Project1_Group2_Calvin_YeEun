@@ -17,6 +17,7 @@ import {
     ScrollArea,
     rem,
     useMantineTheme,
+    Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -30,29 +31,20 @@ import {
 } from '@tabler/icons-react';
 import classes from './navbar.module.css';
 
-const loader = async () => {
-    return null;
-};
-
 export default function Navbar() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
         useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
 
-    const navigate = useNavigate();
-
-    const handleLoginNavigate = () => {
-        console.log('LOGGED');
-        navigate('/login');
-    };
-
     return (
         <Box pb={20}>
             <header className={classes.header}>
                 <Group justify='space-between' h='100%'>
                     <Group h='100%' gap={0} visibleFrom='sm'>
-                        <h3>Calvin & YeEun's Projsect I</h3>
+                        <Title order={2} size={20}>
+                            URL Shortener
+                        </Title>
                     </Group>
                     <Group h='100%' gap={1} visibleFrom='sm'>
                         <a href='/' className={classes.link}>
