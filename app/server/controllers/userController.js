@@ -1,14 +1,18 @@
-export const postAddUser = async (req, res) => {
-    var username = req.body.username;
-    var password = req.body.password;
-    var hashedPassword = bcrypt.hashSync(password, saltRounds);
+import bcrypt from 'bcrypt';
+import { createUser } from '../models/usersModel.js';
 
-    var success = await db_users.createUser({ user: username, hashedPassword: hashedPassword });
-    if (success) {
-        res.redirect('/');
-    } else {
-        res.status(404)
-        res.json({success: false, message: "Error creating new user"});
+const saltRounds = 12;
+
+export const signUpUser = async ({ username, password }) => {
+    const hashPassword = bcrypt.hashSync(password, saltRounds);
+
+    const result = await createUser({
+        username: username,
+        password: hashPassword,
+    });
+
+    if (!result) {
+        throw new Error('Error signing up new user');
     }
-}
-
+    return { success: true };
+};
