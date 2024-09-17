@@ -5,12 +5,12 @@ export const createUser = async (postData) => {
 		INSERT INTO user
 		(username, password)
 		VALUES
-		(:user, :passwordHash);
+		(:username, :passwordHash);
 	`;
 
     let params = {
-        user: postData.user,
-        passwordHash: postData.hashedPassword,
+        username: postData.username,
+        passwordHash: postData.password,
     };
 
     try {

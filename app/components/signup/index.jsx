@@ -9,20 +9,15 @@ import {
     Container,
     Group,
     Button,
+    Popover,
+    Loader,
 } from '@mantine/core';
 import classes from '../signup/signup.module.css';
 import { useForm } from '@mantine/form';
-import { Form, useActionData } from '@remix-run/react';
+import { Form, useNavigate, useActionData } from '@remix-run/react';
 
-export function SignUpForm() {
-    const actionData = useActionData();
-
-    const form = useForm({
-        initialValues: {
-            username: '',
-            password: '',
-        },
-    });
+export function SignUpForm({ loading, setLoading, open, setOpen }) {
+    console.log(open);
     return (
         <Container size={420} my={40}>
             <Title ta='center' className={classes.title}>
@@ -49,9 +44,42 @@ export function SignUpForm() {
                         required
                         mt='md'
                     />
-                    <Button type='submit' fullWidth mt='xl'>
-                        Sign up
-                    </Button>
+
+                    <Popover
+                        opened={open} // Popover will open based on the `open` state
+                        onClose={() => setOpen(false)}
+                        title='Sign Up Failed'
+                        position='bottom'
+                        width={260}
+                        withArrow
+                        shadow='md'
+                    >
+                        <Popover.Target>
+                            <Button
+                                onClick={() => {
+                                    setLoading(true);
+                                }}
+                                type='submit'
+                                fullWidth
+                                mt='xl'
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loader size='xs' color='white' />{' '}
+                                        {/* Spinner */}
+                                        <span style={{ marginLeft: 8 }}>
+                                            Signing Up...
+                                        </span>
+                                    </>
+                                ) : (
+                                    'Sign up'
+                                )}
+                            </Button>
+                        </Popover.Target>{' '}
+                        <Popover.Dropdown>
+                            <Text>Sign up failed. Please try again.</Text>
+                        </Popover.Dropdown>
+                    </Popover>
                 </Paper>
             </Form>
         </Container>
