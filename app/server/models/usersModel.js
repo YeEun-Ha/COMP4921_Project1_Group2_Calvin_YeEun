@@ -76,19 +76,42 @@ async function getUser(postData) {
     }
 }
 
-async function getTexts() {
-    const ourTableName = 'texts';
-    let getData = `
+async function getContent(ourTableName) {
+	let getData = `
         SELECT content, short_url, hits, active, created, last_hit 
         FROM ${ourTableName} ;
         `;
-    try {
-        const results = await database.query(getData);
+	try {
+		const results = await db.query(getData);
 
-        console.log('Successfully retrieved text data');
-        console.log(results);
-        return results;
-    } catch (err) {
-        console.error('Error fetching data from MySQL:', err);
-    }
+		console.log(`Successfully retrieved the content from ${ourTableName}`)
+		// console.log(results)
+		return results;
+	} catch (err) {
+		console.error('Error fetching data from MySQL:', err);
+	}
 }
+
+async function updateHit(ourTableName, shortUrl) {
+	let updateData = `
+		UPDATE ${ourTableName} 
+		SET hits = hits + 1, last_hit = NOW() 
+		WHERE short_url = ?      
+	`;
+	let getData = `
+		SELECT hits, last_hit FROM ${ourTableName} 
+		WHERE short_url = ?
+	`;
+	try {
+		await database.query(updateData, [shortUrl]);
+		const results = await database.query(getData, [shortUrl]);
+		
+		console.log(`Successfully updated the hit:`, results)
+		return results;
+	} catch (error) {
+		console.error(`Error updating hits:`, error);
+		// res.status(500).json({ success: false, message: 'Internal Server Error' });
+	}  
+}
+
+// module.exports = {createUser, getUsers, getUser, getContent, updateHit};

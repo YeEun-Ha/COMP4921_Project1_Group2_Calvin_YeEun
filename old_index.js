@@ -24,6 +24,8 @@ const node_session_secret = "aab2475b-ad13-4d28-9363-9d3c6f11cc91";
 
 // app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+
 
 var mongoStore = MongoStore.create({
 	mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@cluster0.dqd1fyd.mongodb.net/sessions`,
@@ -55,7 +57,7 @@ app.get('/', (req,res) => {
         <input name='password' type='password' placeholder='password'>
         <button style="">Login</button>
         </form>
-        <button style=""><a href="http://localhost:3030/signup">Signup</a>
+        <button style=""><a href="http://localhost:${port}/signup">Signup</a>
         </button>
         `;
         res.send(html);
@@ -144,53 +146,102 @@ app.post('/loggingin', async (req,res) => {
 // app.use('/loggedin/admin', adminAuthorization);
 
 app.get('/loggedin', (req,res) => {
-    var html = `<h1>Hello, ${req.session.username}!</h1>`
+    var html = `
+        <h1>Hello, ${req.session.username}!</h1>
+        <br><a href="http://localhost:${port}/mainDisplay">Go to main page</a>
+    `
     res.send(html);
     // res.render("loggedin", {username: req.session.username});
 });
 
 
 app.get('/mainDisplay', async (req, res) => {
-    try{
-        let tableRows = '';
-        var [texts] = await db_users.getTexts();
+    let tableRows = '';
+    var [texts] = await db_users.getContent('texts');
     
-        texts.forEach(text => {
-            tableRows += `
-                <tr>
-                    <td>${text.content}</td>
-                    <td>${text.short_url}</td>
-                    <td>${text.hits}</td>
-                    <td>${text.active}</td>
-                    <td>${text.created}</td>
-                    <td>${text.last_hit}</td>
-                </tr>
-            `;
-        });
+    if (texts.length >= 1) {
+        console.log(`received ${texts.length} rows from the table`)
+        console.log(`This is the received table:`, texts)
+    } else {
+        console.log(`received no content from the table`)
+    }
+    texts.forEach(text => {
+        tableRows += `
+            <tr>
+                <td>${text.content}</td>
+                <td><a href="${text.short_url}" class="hit_link" target="_blank">${text.short_url}</a></td>
+                <td class="hits">${text.hits}</td>
+                <td>${text.active}</td>
+                <td>${text.created}</td>
+                <td class="last_hit">${text.last_hit}</td>
+            </tr>
+        `;
+    });
     
-        var html = `
-        Filter: 
-        <button>Links</button>
-        <button>Images</button>
-        <button>Text</button>
-        <button>Create a new posting</button>
-        <table>
-          <tr>
+    var html = `
+    Filter: <button>Links</button> <button>Images</button>
+    <button>Text</button> <button>Create a new posting</button>
+    <table>
+        <tr>
             <th>Content</th>
             <th>Short URL</th>
             <th>Hits</th>
             <th>Active</th>
             <th>Created</th>
             <th>Last Hit</th>
-          </tr>
-          ${tableRows}
-        </table>
-        `;
-    
-        res.send(html);
-    } catch (error) {
-        console.error('Error fetching data from MySQL:', error);
-        // res.status(500).send('Internal Server Error');
+        </tr>
+        ${tableRows}
+    </table>
+
+      
+  <script>
+    document.querySelectorAll('.hit_link').forEach(link => {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const shortUrl = this.getAttribute('href');
+            
+            console.log("Sending shortUrl:", shortUrl); 
+            fetch('/updateHit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify({ shortUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                console.log("data looks like this: ", data)
+                const tableRow = this.closest('tr');
+                tableRow.querySelector('.hits').textContent = data.hits;
+                tableRow.querySelector('.last_hit').textContent = data.lastHit;
+                } else {
+                    console.log('Failed to update hits.');
+                }
+            })
+            .catch(error => {
+                console.error('What error??:', error);
+            });
+        });
+    });
+    </script>
+    `;
+
+    res.send(html);
+});
+
+app.post('/updateHit', async (req, res) => {
+    console.log("req.body is the following:", req.body);
+    const shortUrl = req.body.shortUrl; 
+
+    if (shortUrl != '') {
+        var [hitsAndLasthit] = await db_users.updateHit('texts', shortUrl)
+        
+        res.json({
+            success: true,
+            hits: hitsAndLasthit[0].hits,
+            lastHit: hitsAndLasthit[0].last_hit
+        });
+    } else {
+        console.log("No url. Received one:", shortUrl)
     }
 });
 
