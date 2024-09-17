@@ -26,14 +26,18 @@ export const createUser = async (postData) => {
     }
 };
 
-async function getUsers(postData) {
+export async function getUsers(postData) {
     let getUsersSQL = `
 		SELECT username, password
 		FROM user;
 	`;
 
     try {
-        const results = await db.query(getUsersSQL);
+        const params = {
+            username: postData.username,
+            passwordHash: postData.password,
+        };
+        const results = await db.query(getUsersSQL, params);
 
         console.log('Successfully retrieved users');
         console.log(results[0]);
@@ -45,7 +49,7 @@ async function getUsers(postData) {
     }
 }
 
-async function getUser(postData) {
+export async function getUser(postData) {
     let getUserSQL = `
 		SELECT user_id, username, password
 		FROM user
@@ -60,7 +64,7 @@ async function getUser(postData) {
     // `;
 
     let params = {
-        user: postData.user,
+        username: postData.username,
     };
 
     try {
