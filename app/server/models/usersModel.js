@@ -26,7 +26,7 @@ export const createUser = async (postData) => {
     }
 };
 
-export async function getUsers(postData) {
+export const getUsers = async (postData) => {
     let getUsersSQL = `
 		SELECT username, password
 		FROM user;
@@ -47,7 +47,7 @@ export async function getUsers(postData) {
         console.log(err);
         return false;
     }
-}
+};
 
 export async function getUser(postData) {
     let getUserSQL = `
