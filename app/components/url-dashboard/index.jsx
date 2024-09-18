@@ -2,18 +2,14 @@ import cx from 'clsx';
 import { Box, Stack, Table, ScrollArea, Group, Button } from '@mantine/core';
 import classes from './url-dashboard.module.css';
 import { useState } from 'react';
-import { useActionData } from '@remix-run/react';
-import { json } from '@remix-run/node'; // To send a proper response
-import { useLoaderData } from '@remix-run/react'; // To access the data in the component
-import { getContent } from '../../server/models/usersModel';
-
+import { json } from '@remix-run/react';
 
 
 export default function URLDashboard({loaderData}) {
     const [scrolled, setScrolled] = useState(false);
-    
+
     const table = loaderData?.table[0] ?? []  
-    console.log("table content:", table)
+    // console.log("successful until loaderData:", table)
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
 
     // Function to update the hit count when a URL is clicked
@@ -24,6 +20,8 @@ export default function URLDashboard({loaderData}) {
             body: JSON.stringify({ shortUrl })
         });
         const data = await response.json();
+        console.log("let me show you the fetched data", data)
+        
         if (data.success) {
             // Update the hit count and last hit locally
             setData((prevData) =>
@@ -44,21 +42,21 @@ export default function URLDashboard({loaderData}) {
             <Table.Td>
                 <a 
                     href={tableRow.short_url} 
-                    className="hit_link" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     onClick={(e) => {
                         e.preventDefault();
+                        console.log("does it work???")
                         handleLinkClick(tableRow.short_url, index);
-                    }}
+                    }} 
                 >
                     {tableRow.short_url}
                 </a>
             </Table.Td>
-            <Table.Td className="hits">{tableRow.hits}</Table.Td>
+            <Table.Td>{tableRow.hits}</Table.Td>
             <Table.Td>{tableRow.active ? 'Yes' : 'No'}</Table.Td>
             <Table.Td>{tableRow.created}</Table.Td>
-            <Table.Td className="last_hit">{tableRow.last_hit}</Table.Td>
+            <Table.Td>{tableRow.last_hit}</Table.Td>
         </Table.Tr>
     ));
 
