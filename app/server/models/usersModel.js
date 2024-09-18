@@ -26,7 +26,7 @@ export const createUser = async (postData) => {
     }
 };
 
-export async function getUsers(postData) {
+export const getUsers = async (postData) => {
     let getUsersSQL = `
 		SELECT username, password
 		FROM user;
@@ -47,13 +47,13 @@ export async function getUsers(postData) {
         console.log(err);
         return false;
     }
-}
+};
 
-export async function getUser(postData) {
+export const getUser = async (postData) => {
     let getUserSQL = `
 		SELECT user_id, username, password
 		FROM user
-		WHERE username = :user;
+		WHERE username = :username;
 	`;
 
     // let getUserSQL = `
@@ -78,7 +78,7 @@ export async function getUser(postData) {
         console.log(err);
         return false;
     }
-}
+};
 
 export async function getContent() {
     let ourTableName = 'texts'

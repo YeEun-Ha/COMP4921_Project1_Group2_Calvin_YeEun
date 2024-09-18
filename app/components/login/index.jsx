@@ -10,6 +10,7 @@ import {
     Group,
     Button,
 } from '@mantine/core';
+import { Form } from '@remix-run/react';
 import classes from './login.module.css';
 
 export function LoginForm() {
@@ -24,29 +25,32 @@ export function LoginForm() {
                     Create account
                 </Anchor>
             </Text>
-
-            <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
-                <TextInput
-                    label='Email'
-                    placeholder='you@mantine.dev'
-                    required
-                />
-                <PasswordInput
-                    label='Password'
-                    placeholder='Your password'
-                    required
-                    mt='md'
-                />
-                <Group justify='space-between' mt='lg'>
-                    <Checkbox label='Remember me' />
-                    <Anchor component='button' size='sm'>
-                        Forgot password?
-                    </Anchor>
-                </Group>
-                <Button fullWidth mt='xl'>
-                    Sign in
-                </Button>
-            </Paper>
+            <Form method='post'>
+                <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
+                    <TextInput
+                        label='Username'
+                        name='username'
+                        placeholder='Your username'
+                        required
+                    />
+                    <PasswordInput
+                        label='Password'
+                        name='password'
+                        placeholder='Your password'
+                        required
+                        mt='md'
+                    />
+                    <Group justify='space-between' mt='lg'>
+                        <Checkbox label='Remember me' />
+                        <Anchor component='button' size='sm'>
+                            Forgot password?
+                        </Anchor>
+                    </Group>
+                    <Button type='submit' fullWidth mt='xl'>
+                        Sign In
+                    </Button>
+                </Paper>
+            </Form>
         </Container>
     );
 }

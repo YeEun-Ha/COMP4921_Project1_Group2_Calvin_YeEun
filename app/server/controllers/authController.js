@@ -1,15 +1,32 @@
-export const postLogin = async (req, res) => {
-    // var username = req.body.username;
-    // var password = req.body.password;
-    // var hashedPassword = bcrypt.hashSync(password, saltRounds);
-    //
-    // var success = await db_users.createUser({ user: username, hashedPassword: hashedPassword });
-    const success = false
-    if (success) {
-        res.redirect('/');
-    } else {
-        res.status(404)
-        res.json({success: false, message: "Error creating new user"});
-    }
-}
+import bcrypt from 'bcrypt';
+import { getUser } from '../models/usersModel';
+import { SALT_ROUNDS, COOKIE_EXPIRY } from '../utils/constants';
 
+export const postLogin = async (userPayload) => {
+    const username = userPayload.username;
+    const password = userPayload.password;
+
+    // const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS);
+    const user = await getUser({ username });
+    console.log(user);
+
+    if (!user) {
+        return false;
+    }
+
+    if (user.length != 1) {
+        return false;
+    }
+
+    const hashedPassword = user[0].password;
+
+    if (bcrypt.compareSync(password, hashedPassword)) {
+        return {
+            userID: user[0].user_id,
+            username: user[0]?.username,
+            expiry: COOKIE_EXPIRY,
+        };
+    }
+
+    return false;
+};

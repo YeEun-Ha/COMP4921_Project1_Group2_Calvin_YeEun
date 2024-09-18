@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt';
 import { createUser } from '../models/usersModel.js';
-
-const saltRounds = 12;
+import { SALT_ROUNDS } from '../utils/constants.js';
 
 export const signUpUser = async ({ username, password }) => {
-    const hashPassword = bcrypt.hashSync(password, saltRounds);
+    const hashPassword = bcrypt.hashSync(password, SALT_ROUNDS);
 
     const result = await createUser({
         username: username,
