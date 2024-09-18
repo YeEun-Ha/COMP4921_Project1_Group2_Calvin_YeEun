@@ -17,7 +17,6 @@ import { useForm } from '@mantine/form';
 import { Form, useNavigate, useActionData } from '@remix-run/react';
 
 export function SignUpForm({ loading, setLoading, open, setOpen }) {
-    console.log(open);
     return (
         <Container size={420} my={40}>
             <Title ta='center' className={classes.title}>
