@@ -5,23 +5,16 @@ import { useState } from 'react';
 import { useActionData } from '@remix-run/react';
 import { json } from '@remix-run/node'; // To send a proper response
 import { useLoaderData } from '@remix-run/react'; // To access the data in the component
+import { getContent } from '../../server/models/usersModel';
 
 
-// Server-side data fetching
-export const loader = async({requests}) => {
-    data = await getContent();  // Fetch the data from your database
-    return json({ texts: data }); // Return the data as a JSON response
-    // return data
-}       
 
-export default function URLDashboard() {
+export default function URLDashboard({loaderData}) {
     const [scrolled, setScrolled] = useState(false);
-    // const actionData = useActionData();
-    const { table } = useLoaderData();
-    // For object destructuring 
-    console.log(table) 
-    const [data, setData] = useState(table); // Initialize state with fetched data
-
+    // const { table } = useLoaderData(); // For object destructuring
+    const table = loaderData?.table[0] ?? []  
+    console.log("table content:", table)
+    const [data, setData] = useState(table ?? []); // Initialize state with fetched data
 
     // Function to update the hit count when a URL is clicked
     const handleLinkClick = async (shortUrl, index) => {
@@ -56,14 +49,14 @@ export default function URLDashboard() {
                     rel="noopener noreferrer"
                     onClick={(e) => {
                         e.preventDefault();
-                        handleLinkClick(row.short_url, index);
-                }}
+                        handleLinkClick(tableRow.short_url, index);
+                    }}
                 >
                     {tableRow.short_url}
                 </a>
             </Table.Td>
             <Table.Td className="hits">{tableRow.hits}</Table.Td>
-            <Table.Td>{row.active ? 'Yes' : 'No'}</Table.Td>
+            <Table.Td>{tableRow.active ? 'Yes' : 'No'}</Table.Td>
             <Table.Td>{tableRow.created}</Table.Td>
             <Table.Td className="last_hit">{tableRow.last_hit}</Table.Td>
         </Table.Tr>
