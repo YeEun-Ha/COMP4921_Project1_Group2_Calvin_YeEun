@@ -80,7 +80,8 @@ export async function getUser(postData) {
     }
 }
 
-async function getContent(ourTableName) {
+export async function getContent() {
+    let ourTableName = 'texts'
 	let getData = `
         SELECT content, short_url, hits, active, created, last_hit 
         FROM ${ourTableName} ;
@@ -96,7 +97,7 @@ async function getContent(ourTableName) {
 	}
 }
 
-async function updateHit(ourTableName, shortUrl) {
+export async function updateHit(ourTableName, shortUrl) {
 	let updateData = `
 		UPDATE ${ourTableName} 
 		SET hits = hits + 1, last_hit = NOW() 
@@ -107,8 +108,8 @@ async function updateHit(ourTableName, shortUrl) {
 		WHERE short_url = ?
 	`;
 	try {
-		await database.query(updateData, [shortUrl]);
-		const results = await database.query(getData, [shortUrl]);
+		await db.query(updateData, [shortUrl]);
+		const results = await db.query(getData, [shortUrl]);
 		
 		console.log(`Successfully updated the hit:`, results)
 		return results;
