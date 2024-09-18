@@ -11,7 +11,7 @@ import { getContent } from '../../server/models/usersModel';
 
 export default function URLDashboard({loaderData}) {
     const [scrolled, setScrolled] = useState(false);
-    // const { table } = useLoaderData(); // For object destructuring
+    
     const table = loaderData?.table[0] ?? []  
     console.log("table content:", table)
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
