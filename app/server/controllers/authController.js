@@ -1,10 +1,14 @@
 import bcrypt from 'bcrypt';
+import { getUser } from '../models/usersModel';
+import { SALT_ROUNDS, COOKIE_EXPIRY } from '../utils/constants';
 
 export const postLogin = async (userPayload) => {
     const username = userPayload.username;
     const password = userPayload.password;
 
-    const user = await getUsers({ username, password: hashedPassword });
+    // const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS);
+    const user = await getUser({ username });
+    console.log(user);
 
     if (!user) {
         return false;
@@ -14,12 +18,14 @@ export const postLogin = async (userPayload) => {
         return false;
     }
 
-    const hashedPassword = user[0].hashedPassword;
+    const hashedPassword = user[0].password;
 
     if (bcrypt.compareSync(password, hashedPassword)) {
-        console.log(hashedPassword);
-        //add session data here
-        return true;
+        return {
+            userID: user[0].user_id,
+            username: user[0]?.username,
+            expiry: COOKIE_EXPIRY,
+        };
     }
 
     return false;
