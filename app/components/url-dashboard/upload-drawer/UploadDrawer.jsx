@@ -13,6 +13,12 @@ export function UploadDrawer() {
     const [controlsRefs, setControlsRefs] = useState([]);
     const [active, setActive] = useState(null);
 
+    const CONTENT_TYPES = {
+        0: 'Image',
+        1: 'Text',
+        2: 'URL',
+    };
+
     const [content, setContent] = useState(null);
 
     const setControlRef = (index) => (node) => {
@@ -33,11 +39,20 @@ export function UploadDrawer() {
     ));
 
     const handleURLSubmit = async () => {
-        const response = await fetch('/api/submitContent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: content,
-        });
+        switch (CONTENT_TYPES[active]) {
+            case 'Image':
+                await fetch('/api/submitContent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/file' },
+                    body: content,
+                });
+            case 'Text':
+                await fetch('/api/submitContent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content }),
+                });
+        }
     };
 
     return (
@@ -83,6 +98,7 @@ export function UploadDrawer() {
                             autosize
                             minRows={2}
                             maxRows={4}
+                            onChange={(event) => setContent(event.target.value)}
                         />
                     ) : (
                         <></>
@@ -93,6 +109,7 @@ export function UploadDrawer() {
                             label='URL Input'
                             description='Submit an existing URL to shorten'
                             placeholder='Paste a URL here'
+                            onChange={(event) => setContent(event.target.value)}
                         />
                     ) : (
                         <></>
@@ -100,7 +117,7 @@ export function UploadDrawer() {
                 </Container>
                 {active !== null ? (
                     <Flex display='flex' w='100%' justify='flex-end'>
-                        <Button>Submit</Button>
+                        <Button onClick={handleURLSubmit}>Submit</Button>
                     </Flex>
                 ) : (
                     <></>
