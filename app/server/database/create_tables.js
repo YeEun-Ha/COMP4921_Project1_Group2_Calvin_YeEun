@@ -33,7 +33,7 @@ export async function createUserTable() {
 
 export async function createURLTable() {
     const createURLTable = `
-CREATE TABLE IF NOT EXISTS url (
+CREATE TABLE IF NOT EXISTS url_shortener (
     url_id INT NOT NULL AUTO_INCREMENT,
     content VARCHAR(200) NOT NULL,
     hits INT NOT NULL,

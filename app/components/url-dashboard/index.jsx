@@ -2,13 +2,13 @@ import cx from 'clsx';
 import { Box, Stack, Table, ScrollArea, Group, Button } from '@mantine/core';
 import classes from './url-dashboard.module.css';
 import { useState } from 'react';
+import { UploadDrawer } from './upload-drawer/UploadDrawer';
 import { json } from '@remix-run/react';
 
-
-export default function URLDashboard({loaderData}) {
+export default function URLDashboard({ loaderData }) {
     const [scrolled, setScrolled] = useState(false);
 
-    const table = loaderData?.table[0] ?? []  
+    const table = loaderData?.table ?? [];
     // console.log("successful until loaderData:", table)
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
 
@@ -17,11 +17,11 @@ export default function URLDashboard({loaderData}) {
         const response = await fetch('/updateHit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ shortUrl })
+            body: JSON.stringify({ shortUrl }),
         });
         const data = await response.json();
-        console.log("let me show you the fetched data", data)
-        
+        console.log('let me show you the fetched data', data);
+
         if (data.success) {
             // Update the hit count and last hit locally
             setData((prevData) =>
@@ -35,20 +35,19 @@ export default function URLDashboard({loaderData}) {
             console.log('Failed to update hits.');
         }
     };
-
     const tableRows = data.map((tableRow, index) => (
         <Table.Tr key={tableRow.short_url}>
             <Table.Td>{tableRow.content}</Table.Td>
             <Table.Td>
-                <a 
-                    href={tableRow.short_url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                <a
+                    href={tableRow.short_url}
+                    target='_blank'
+                    rel='noopener noreferrer'
                     onClick={(e) => {
                         e.preventDefault();
-                        console.log("does it work???")
+                        console.log('does it work???');
                         handleLinkClick(tableRow.short_url, index);
-                    }} 
+                    }}
                 >
                     {tableRow.short_url}
                 </a>
@@ -62,18 +61,26 @@ export default function URLDashboard({loaderData}) {
 
     return (
         <>
-            <Box className={classes.tablecontainer} my={100}>
-                <h1>Get Started by adding a new link, image or text below!</h1>
+            <Box className={classes.tablecontainer} my={25}>
+                <h4>Get Started by adding a new link, image or text!</h4>
             </Box>
-            <Box my={75}>
+
+            <Box my={10}>
                 <Box className={classes.tablecontainer}>
                     {' '}
                     <Stack w={'90%'}>
-                        <Group>
-                            <Button variant='default'>Filter Links</Button>
-                            <Button variant='default'>Filter Images</Button>
-                            <Button variant='default'>Filter Text</Button>
+                        <Group justify='space-between'>
+                            <Group>
+                                <Button variant='default'>Filter Links</Button>
+                                <Button variant='default'>Filter Images</Button>
+                                <Button variant='default'>Filter Text</Button>
+                            </Group>
+                            <Group>
+                                {' '}
+                                <UploadDrawer />
+                            </Group>
                         </Group>
+
                         <ScrollArea
                             h={300}
                             w={'100%'}
