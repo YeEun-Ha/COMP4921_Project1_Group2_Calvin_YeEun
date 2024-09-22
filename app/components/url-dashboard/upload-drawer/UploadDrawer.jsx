@@ -1,23 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { Flex, Box, Container, Drawer, Button } from '@mantine/core';
 import { UploadImageButton } from '../upload-image/UploadImageBtn';
 import { FloatingIndicator, UnstyledButton } from '@mantine/core';
 import { Textarea, TextInput } from '@mantine/core';
 import classes from './uploadDrawer.module.css';
+import { useFetcher } from '@remix-run/react';
+
+const CONTENT_TYPES = {
+    1: 'Image',
+    2: 'Text',
+    3: 'URL',
+};
 
 export function UploadDrawer() {
-    const data = ['Image', 'Text', 'URL'];
+    const data = Object.values(CONTENT_TYPES);
     const [opened, { open, close }] = useDisclosure(false);
     const [rootRef, setRootRef] = useState();
     const [controlsRefs, setControlsRefs] = useState([]);
     const [active, setActive] = useState(null);
-
-    const CONTENT_TYPES = {
-        0: 'Image',
-        1: 'Text',
-        2: 'URL',
-    };
+    const fetcher = useFetcher();
 
     const [content, setContent] = useState(null);
 
@@ -30,31 +32,47 @@ export function UploadDrawer() {
         <UnstyledButton
             key={item}
             className={classes.control}
-            ref={setControlRef(index)}
-            onClick={() => setActive(index)}
-            mod={{ active: active === index }}
+            ref={setControlRef(index + 1)}
+            onClick={() => setActive(index + 1)}
+            mod={{ active: active === index + 1 }}
         >
             <span className={classes.controlLabel}>{item}</span>
         </UnstyledButton>
     ));
 
     const handleURLSubmit = async () => {
-        switch (CONTENT_TYPES[active]) {
-            case 'Image':
-                await fetch('/api/submitContent', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/file' },
-                    body: content,
-                });
-            case 'Text':
-                await fetch('/api/submitContent', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: content }),
-                });
-        }
-    };
+        const formData = new FormData();
 
+        if (active === 1 && content) {
+            formData.append('file', content);
+        } else if (active === 2 && content) {
+            formData.append('text', content);
+        } else if (active === 3 && content) {
+            formData.append('url', content);
+        }
+        formData.append('contentType', active);
+        try {
+            fetcher.submit(
+                formData, // Your form data
+                { method: 'post', action: '/api/submitContent' } // The action route
+            );
+
+            // const response = await fetch('/api/submitContent', {
+            //     method: 'POST',
+            //     body: formData,
+            // });
+        } catch (error) {
+            console.log(error);
+            console.error('Error submitting content:', error);
+        }
+        close();
+    };
+    useEffect(() => {
+        if (fetcher.state === 'idle' && fetcher.type === 'done') {
+            // Submission is done, now load the table data
+            fetcher.load('/dashboard');
+        }
+    }, [fetcher]);
     return (
         <>
             <Drawer
@@ -80,8 +98,9 @@ export function UploadDrawer() {
                         )}
                     </div>
                 </Container>
+
                 <Container my={35} h={125}>
-                    {active === 0 ? (
+                    {active === 1 ? (
                         <UploadImageButton
                             content={content}
                             setContent={setContent}
@@ -89,7 +108,7 @@ export function UploadDrawer() {
                     ) : (
                         <></>
                     )}
-                    {active === 1 ? (
+                    {active === 2 ? (
                         <Textarea
                             label='Enter text content below'
                             withAsterisk
@@ -103,7 +122,7 @@ export function UploadDrawer() {
                     ) : (
                         <></>
                     )}
-                    {active === 2 ? (
+                    {active === 3 ? (
                         <TextInput
                             variant='filled'
                             label='URL Input'

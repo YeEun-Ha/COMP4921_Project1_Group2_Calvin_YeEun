@@ -7,8 +7,13 @@ class CloudinaryClient {
         });
         this.client = Cloudinary;
     }
+    // Helper function to convert file to a buffer
+    async streamToBuffer(file) {
+        const arrayBuffer = await file.arrayBuffer(); // Get the file content as ArrayBuffer
+        return Buffer.from(arrayBuffer); // Convert ArrayBuffer to Node.js Buffer
+    }
 
-    async uploadImage(imagePath) {
+    async uploadImagePath(imagePath) {
         // Use the uploaded file's name as the asset's public ID and
         // allow overwriting the asset with new versions
         const options = {
@@ -30,8 +35,9 @@ class CloudinaryClient {
         }
     }
 
-    async uploadFile(filePath, fileType = 'raw') {
+    async uploadFile(file, fileType = 'raw') {
         // Specify the resource type based on the file type being uploaded
+        const buffer = await this.streamToBuffer(file);
         const options = {
             use_filename: true,
             unique_filename: false,
@@ -40,12 +46,9 @@ class CloudinaryClient {
         };
 
         try {
-            // Upload the file
-            const result = await Cloudinary.v2.uploader.upload(
-                filePath,
-                options
-            );
-            console.log(result);
+            const result = Cloudinary.v2.uploader
+                .upload_stream({ resource_type: 'image' })
+                .end(buffer);
             return result.public_id;
         } catch (error) {
             console.error('Error uploading file to Cloudinary:', error);
