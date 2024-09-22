@@ -7,7 +7,7 @@ import { json } from '@remix-run/react';
 // Server-side data fetching
 export const loader = async() => {
     const data = await getContent();  // Fetch the data from your database
-    console.log(data)
+    console.log("successfully fetched data with getContent() from the db: ", data)
     return json({ table: data }); // Return the data as a JSON response
     // return data
 }
