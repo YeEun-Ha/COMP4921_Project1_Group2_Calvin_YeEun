@@ -59,6 +59,24 @@ export function UploadDrawer() {
             formData.append('url', content);
         }
         formData.append('contentType', active); // 콘텐츠 타입 추가
+        console.log('after appending.. formData:', formData);
+        
+        try{
+            const url = await fetch('/generateUrl', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({}) // empty object 전달
+            });
+            const urlData = await url.json();
+            console.log('F12, fetched url data', urlData.generatedURL);  
+
+            formData.append('urlID', urlData.generatedURL)
+            
+        } catch(error) {
+            console.log(error);
+            console.error('Error fetching url:', error);
+        }
+
         try {
             fetcher.submit( // FormData를 서버에 제출
                 formData, // Your form data

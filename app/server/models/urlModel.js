@@ -1,8 +1,9 @@
 import db from '../database';
 
 export const addContent = async (postData) => {
-    const addContentSQL = `INSERT INTO url (url_id, content, content_type, hits, active, created_at, last_hit) 
-VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit)`;
+    console.log(`postData:`, postData)
+    const addContentSQL = `INSERT INTO url (url_id, content, content_type_id, hits, active, created_at, last_hit, user_id) 
+VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit, 1)`;
     const params = {
         urlId: postData.urlId,
         content: postData.content,
@@ -14,14 +15,20 @@ VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit)`;
     };
     try {
         const result = await db.query(addContentSQL, params);
-        console.log('successfully inserted new content');
+        console.log('successfully inserted new content to db');
         return true;
     } catch (err) {
         console.log(err);
-        console.error('Error inserting url content');
+        console.error('Error inserting url content to db');
         return false;
     }
 };
+
+export const generateUrlKey = async () => {
+    const [dbRows] = await db.query('SELECT generate_url_friendly_pk() AS url_key;');
+    console.log('successfully created an url:', dbRows);
+    return dbRows[0].url_key;
+}
 
 export async function getContent() {
     let getData = `

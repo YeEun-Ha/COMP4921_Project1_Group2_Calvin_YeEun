@@ -10,19 +10,24 @@ export const action = async ({ context, request }) => {
     // request: 사용자가 보낸 요청 데이터(폼 데이터 등)를 포함합니다.
 
     const formData = await request.formData(); // 사용자가 제출한 폼 데이터를 가져옴
-    const userId = context.session.userId; // context.session: 현재 세션에서 사용자 정보를 가져옴
-    console.log('context--->', context);
-    const username = context.session.username;
-    const authenticated = context.session.authenticated;
-    const result = await getUser({ username: username }); // DB에서 사용자 정보를 가져옴. 
+    // const userId = context.session.userId; // context.session: 현재 세션에서 사용자 정보를 가져옴
+    const userId = 1; // context.session: 현재 세션에서 사용자 정보를 가져옴
+    console.log('from request, context--->', context);
+
+    // const username = context.session.username;
+    // const authenticated = context.session.authenticated;
+    // const result = await getUser({ username: username }); // DB에서 사용자 정보를 가져옴. 
 
     // 인증되지 않은 사용자가 요청한 경우, JSON 응답으로 실패 메시지를 반환.
-    if (!authenticated)
-        return json({ success: false, message: 'unauthenticated request' });
+    // if (!authenticated)
+    //     return json({ success: false, message: 'unauthenticated request' });
 
+    console.log(`from request, formData--->`, formData)
     const contentType = Number(formData.get('contentType'));
     const createdAt = new Date(Date.now()).toISOString().split('T')[0]; // 현재 날짜를 ISO 형식으로 변환하여 YYYY-MM-DD 형태로 저장
     console.log('contentType-->', contentType);
+    const urlID = formData.get('urlID')
+    
     if (contentType === 1) {
         console.log('Uploading image...');
         const imageFile = formData.get('file'); // 업로드된 파일
@@ -33,10 +38,11 @@ export const action = async ({ context, request }) => {
             });
         cloudinary.uploadFile(imageFile, 'file');
     } else if (contentType === 2) {
-        console.log('Uploading text content');
-        const data = formData.get('text'); // 텍스트 데이터
+        const data = formData.get('text'); // {text: ..., ...} 이 중 text에 해당하는 value
+        console.log('Uploading text content. data:', data);
+
         const result = await addContent({
-            urlId: data,
+            urlId: urlID,
             content: data,
             contentType: contentType,
             createdAt: createdAt,

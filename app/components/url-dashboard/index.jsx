@@ -18,15 +18,15 @@ export default function URLDashboard({ loaderData }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ shortUrl }),
         });
-        const data = await response.json();
-        console.log('let me show you the fetched data', data);
+        const fetchedData = await response.json();
+        console.log('let me show you the fetched data', fetchedData);
 
-        if (data.success) {
+        if (fetchedData.success) {
             // Update the hit count and last hit locally
             setData((prevData) =>
                 prevData.map((row, i) =>
                     i === index // 클릭된 URL에 해당하는 행의 경우
-                        ? { ...row, hits: data.hits, last_hit: data.lastHit } // [...어레이] {...옵젝트} 딥카피 Spread operator
+                        ? { ...row, hits: fetchedData.hits, last_hit: fetchedData.lastHit } // [...어레이] {...옵젝트} 딥카피 Spread operator
                         : row // 그 외의 행은 변경 없이 그대로 반환
                 )
             );
@@ -84,39 +84,39 @@ export default function URLDashboard({ loaderData }) {
                                     </Table.Tr>
                                 </Table.Thead>
                                 <Table.Tbody>
-                                    {data.map((tableRow, index) => (
-                                        <Table.Tr key={tableRow.url_id}>
+                                    {data.map((dbRow, index) => (
+                                        <Table.Tr key={dbRow.url_id}>
                                             <Table.Td>
                                                 <a
-                                                    href={tableRow.url_id}
+                                                    href={dbRow.url_id}
                                                     target='_blank'
                                                     rel='noopener noreferrer'
                                                     onClick={(e) => {
-                                                        e.preventDefault();
+                                                        // e.preventDefault();
                                                         handleLinkClick(
-                                                            tableRow.url_id,
+                                                            dbRow.url_id,
                                                             index
                                                         );
                                                     }}
                                                 >
-                                                    {tableRow.url_id}
+                                                    {dbRow.url_id}
                                                 </a>
                                             </Table.Td>
                                             <Table.Td>
-                                                {tableRow.content_type_id}
+                                                {dbRow.content_type_id}
                                             </Table.Td>
                                             <Table.Td>
-                                                {tableRow.content}
+                                                {dbRow.content}
                                             </Table.Td>
-                                            <Table.Td>{tableRow.hits}</Table.Td>
+                                            <Table.Td>{dbRow.hits}</Table.Td>
                                             <Table.Td>
-                                                {tableRow.active ? 'Yes' : 'No'}
-                                            </Table.Td>
-                                            <Table.Td>
-                                                {tableRow.created_at}
+                                                {dbRow.active ? 'Yes' : 'No'}
                                             </Table.Td>
                                             <Table.Td>
-                                                {tableRow.last_hit}
+                                                {dbRow.created_at}
+                                            </Table.Td>
+                                            <Table.Td>
+                                                {dbRow.last_hit}
                                             </Table.Td>
                                         </Table.Tr>
                                     ))}
