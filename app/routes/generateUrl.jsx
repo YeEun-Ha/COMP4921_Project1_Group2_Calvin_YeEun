@@ -3,7 +3,7 @@ import { json } from '@remix-run/node';
 
 
 export const action = async ({ request }) => {
-    console.log('request?', await request.json());
+    // console.log('request?', await request.json());
 
     try{
         const urlKey = await generateUrlKey();
