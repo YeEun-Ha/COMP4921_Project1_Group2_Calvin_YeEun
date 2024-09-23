@@ -12,6 +12,7 @@ export default function URLDashboard({ loaderData }) {
 
     // Function to update the hit count when a URL is clicked
     const handleLinkClick = async (shortUrl, index) => {
+        
         const response = await fetch('/updateHit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -35,7 +36,7 @@ export default function URLDashboard({ loaderData }) {
     };
     useEffect(() => {
         setData(table);
-    }, [table, data]);
+    }, [table]);
 
     return (
         <>
@@ -102,7 +103,7 @@ export default function URLDashboard({ loaderData }) {
                                                 </a>
                                             </Table.Td>
                                             <Table.Td>
-                                                {tableRow.content_type}
+                                                {tableRow.content_type_id}
                                             </Table.Td>
                                             <Table.Td>
                                                 {tableRow.content}

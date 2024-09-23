@@ -25,7 +25,7 @@ VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit)`;
 
 export async function getContent() {
     let getData = `
-        SELECT url_id, content, content_type, hits, active, created_at, last_hit 
+        SELECT url_id, content, content_type_id, hits, active, created_at, last_hit, user_id
         FROM url;
         `;
     try {
@@ -40,11 +40,11 @@ export async function updateHit(shortUrl) {
     let updateData = `
 		UPDATE url
 		SET hits = hits + 1, last_hit = NOW() 
-		WHERE short_url = ?      
+		WHERE url_id = ?      
 	`;
     let getData = `
 		SELECT hits, last_hit FROM url 
-		WHERE short_url = ?
+		WHERE url_id = ?
 	`;
     try {
         await db.query(updateData, [shortUrl]);

@@ -1,4 +1,4 @@
-import { updateHit } from "../server/models/usersModel";
+import { updateHit } from '../server/models/urlModel';
 import { json } from '@remix-run/react';
 
 export const action = async ({ request }) => {
@@ -8,7 +8,7 @@ export const action = async ({ request }) => {
     const shortUrl = parsedJson.shortUrl; 
 
     if (shortUrl != '') {
-        var [hitsAndLasthit] = await updateHit('texts', shortUrl)
+        var [hitsAndLasthit] = await updateHit(shortUrl)
         
         return json({
             success: true,

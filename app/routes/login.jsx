@@ -15,7 +15,8 @@ export const action = async ({ request, context }) => {
 
     const result = await postLogin(userPayload);
     if (result) {
-        console.log('Login successfuly');
+        console.log('Login successfuly, result:', result);
+        console.log('error, we dont have context. context:', context)
         context.session.userId = result.userID;
         context.session.username = result.username;
         context.session.authenticated = true;

@@ -3,7 +3,7 @@ import db from '.';
 export async function createTables() {
     try {
         await createContentTypeTable();
-        await seedContentTypeTable();
+        // await seedContentTypeTable();
         await createUserTable();
         await createURLTable();
     } catch (e) {
@@ -55,28 +55,28 @@ export async function createContentTypeTable() {
     }
 }
 
-export async function seedContentTypeTable() {
-    const insertContentType = `
-INSERT INTO content_type (content_id, content_type)
-VALUES
-    (1, 'Image'),
-    (2, 'Text'),
-    (3, 'URL');
-`;
+// export async function seedContentTypeTable() {
+//     const insertContentType = `
+// INSERT INTO content_type (content_id, content_type)
+// VALUES
+//     (1, 'Image'),
+//     (2, 'Text'),
+//     (3, 'URL');
+// `;
 
-    try {
-        const results = await db.query(insertContentType);
-        console.log('Insert Content Type Table');
-        console.log(results);
+//     try {
+//         const results = await db.query(insertContentType);
+//         console.log('Insert Content Type Table');
+//         console.log(results);
 
-        return true;
-    } catch (err) {
-        console.log(err);
-        console.log('Error inserting content type tables');
+//         return true;
+//     } catch (err) {
+//         console.log(err);
+//         console.log('Error inserting content type tables');
 
-        return false;
-    }
-}
+//         return false;
+//     }
+// }
 
 export async function createURLTable() {
     const createURLTable = `
