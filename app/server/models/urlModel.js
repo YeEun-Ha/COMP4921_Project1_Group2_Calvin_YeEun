@@ -1,8 +1,9 @@
 import db from '../database';
 
 export const addContent = async (postData) => {
-    const addContentSQL = `INSERT INTO url (url_id, content, content_type, hits, active, created_at, last_hit) 
-VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit)`;
+    const addContentSQL = `INSERT INTO url (url_id, content, content_type_id, hits, active, created_at, last_hit, user_id) 
+VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit, 1)`;
+
     const params = {
         urlId: postData.urlId,
         content: postData.content,

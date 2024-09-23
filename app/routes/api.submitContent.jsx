@@ -5,14 +5,15 @@ import { addContent } from '../server/models/urlModel.js';
 
 export const action = async ({ context, request }) => {
     const formData = await request.formData();
-    const userId = context.session.userId;
+    // const userId = context.session.userId;
+    const userId = 1;
     console.log(context);
-    const username = context.session.username;
-    const authenticated = context.session.authenticated;
-    const result = await getUser({ username: username });
+    // const username = context.session.username;
+    // const authenticated = context.session.authenticated;
+    // const result = await getUser({ username: username });
 
-    if (!authenticated)
-        return json({ success: false, message: 'unauthenticated request' });
+    // if (!authenticated)
+    //     return json({ success: false, message: 'unauthenticated request' });
 
     const contentType = Number(formData.get('contentType'));
     const createdAt = new Date(Date.now()).toISOString().split('T')[0];
