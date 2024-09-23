@@ -24,9 +24,9 @@ export default function URLDashboard({ loaderData }) {
             // Update the hit count and last hit locally
             setData((prevData) =>
                 prevData.map((row, i) =>
-                    i === index
-                        ? { ...row, hits: data.hits, last_hit: data.lastHit }
-                        : row
+                    i === index // 클릭된 URL에 해당하는 행의 경우
+                        ? { ...row, hits: data.hits, last_hit: data.lastHit } // [...어레이] {...옵젝트} 딥카피 Spread operator
+                        : row // 그 외의 행은 변경 없이 그대로 반환
                 )
             );
         } else {

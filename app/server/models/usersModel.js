@@ -80,43 +80,43 @@ export const getUser = async (postData) => {
     }
 };
 
-export async function getContent() {
-    let ourTableName = 'texts'
-	let getData = `
-        SELECT content, short_url, hits, active, created, last_hit 
-        FROM ${ourTableName} ;
-        `;
-	try {
-		const results = await db.query(getData);
+// export async function getContent() {
+//     let ourTableName = 'texts'
+// 	let getData = `
+//         SELECT content, short_url, hits, active, created, last_hit 
+//         FROM ${ourTableName} ;
+//         `;
+// 	try {
+// 		const results = await db.query(getData);
 
-		console.log(`Successfully retrieved the content from ${ourTableName}`)
-		// console.log(results)
-		return results;
-	} catch (err) {
-		console.error('Error fetching data from MySQL:', err);
-	}
-}
+// 		console.log(`Successfully retrieved the content from ${ourTableName}`)
+// 		// console.log(results)
+// 		return results;
+// 	} catch (err) {
+// 		console.error('Error fetching data from MySQL:', err);
+// 	}
+// }
 
-export async function updateHit(ourTableName, shortUrl) {
-	let updateData = `
-		UPDATE ${ourTableName} 
-		SET hits = hits + 1, last_hit = NOW() 
-		WHERE short_url = ?      
-	`;
-	let getData = `
-		SELECT hits, last_hit FROM ${ourTableName} 
-		WHERE short_url = ?
-	`;
-	try {
-		await db.query(updateData, [shortUrl]);
-		const results = await db.query(getData, [shortUrl]);
+// export async function updateHit(ourTableName, shortUrl) {
+// 	let updateData = `
+// 		UPDATE ${ourTableName} 
+// 		SET hits = hits + 1, last_hit = NOW() 
+// 		WHERE short_url = ?      
+// 	`;
+// 	let getData = `
+// 		SELECT hits, last_hit FROM ${ourTableName} 
+// 		WHERE short_url = ?
+// 	`;
+// 	try {
+// 		await db.query(updateData, [shortUrl]);
+// 		const results = await db.query(getData, [shortUrl]);
 		
-		console.log(`Successfully updated the hit:`, results)
-		return results;
-	} catch (error) {
-		console.error(`Error updating hits:`, error);
-		// res.status(500).json({ success: false, message: 'Internal Server Error' });
-	}  
-}
+// 		console.log(`Successfully updated the hit:`, results)
+// 		return results;
+// 	} catch (error) {
+// 		console.error(`Error updating hits:`, error);
+// 		// res.status(500).json({ success: false, message: 'Internal Server Error' });
+// 	}  
+// }
 
 // module.exports = {createUser, getUsers, getUser, getContent, updateHit};

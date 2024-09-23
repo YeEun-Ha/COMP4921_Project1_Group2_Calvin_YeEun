@@ -35,12 +35,12 @@ export async function createUserTable() {
 
 export async function createContentTypeTable() {
     const createContentTypeTable = `
-CREATE TABLE IF NOT EXISTS content_type (
-content_id INT NOT NULL,
-content_type VARCHAR(100) NOT NULL,
-PRIMARY KEY (content_id)
-)
-`;
+    CREATE TABLE IF NOT EXISTS content_type (
+        content_type_id INT NOT NULL,
+        type_name VARCHAR(100) NOT NULL,
+        PRIMARY KEY (content_type_id)
+    );
+    `;
 
     try {
         const results = await db.query(createContentTypeTable);
@@ -83,13 +83,15 @@ export async function createURLTable() {
 CREATE TABLE IF NOT EXISTS url (
     url_id VARCHAR(100) NOT NULL,
     content VARCHAR(200) NOT NULL,
-    content_type INT NOT NULL, 
+    content_type_id INT NOT NULL, 
     hits INT NOT NULL,
     active BOOL NOT NULL,
     created_at DATE NOT NULL,     -- renamed 'create' to 'created_at'
     last_hit DATE NOT NULL,
+    user_id INT NOT NULL,
     PRIMARY KEY (url_id),
-    FOREIGN KEY (content_type) REFERENCES content_type(content_id)
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (content_type_id) REFERENCES content_type(content_type_id)
 );
 `;
     try {
