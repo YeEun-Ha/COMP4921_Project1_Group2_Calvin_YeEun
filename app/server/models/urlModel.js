@@ -1,6 +1,8 @@
 import db from '../database';
 
 export const addContent = async (postData) => {
+    console.log(`postData --->`, postData);
+
     const addContentSQL = `INSERT INTO url (url_id, content, content_type_id, hits, active, created_at, last_hit, user_id) 
 VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit, 1)`;
 
@@ -15,18 +17,18 @@ VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit, 1
     };
     try {
         const result = await db.query(addContentSQL, params);
-        console.log('successfully inserted new content');
+        console.log('successfully inserted new content to db');
         return true;
     } catch (err) {
         console.log(err);
-        console.error('Error inserting url content');
+        console.error('Error inserting url content to db');
         return false;
     }
 };
 
 export async function getContent() {
     let getData = `
-        SELECT url_id, content, content_type, hits, active, created_at, last_hit 
+        SELECT url_id, content, content_type_id, hits, active, created_at, last_hit, user_id
         FROM url;
         `;
     try {
@@ -41,11 +43,11 @@ export async function updateHit(shortUrl) {
     let updateData = `
 		UPDATE url
 		SET hits = hits + 1, last_hit = NOW() 
-		WHERE short_url = ?      
+		WHERE url_id = ?      
 	`;
     let getData = `
 		SELECT hits, last_hit FROM url 
-		WHERE short_url = ?
+		WHERE url_id = ?
 	`;
     try {
         await db.query(updateData, [shortUrl]);

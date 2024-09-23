@@ -18,7 +18,7 @@ export default function URLDashboard({ loaderData }) {
             body: JSON.stringify({ shortUrl }),
         });
         const data = await response.json();
-        console.log('let me show you the fetched data', data);
+        console.log('F12: the fetched data', data);
 
         if (data.success) {
             // Update the hit count and last hit locally
@@ -35,7 +35,7 @@ export default function URLDashboard({ loaderData }) {
     };
     useEffect(() => {
         setData(table);
-    }, [table, data]);
+    }, [table]);
 
     return (
         <>
@@ -105,7 +105,7 @@ export default function URLDashboard({ loaderData }) {
                                                 {tableRow.content_type}
                                             </Table.Td>
                                             <Table.Td>
-                                                {tableRow.content}
+                                                {tableRow.content_type_id}
                                             </Table.Td>
                                             <Table.Td>{tableRow.hits}</Table.Td>
                                             <Table.Td>
