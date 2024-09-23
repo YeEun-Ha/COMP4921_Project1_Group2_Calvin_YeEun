@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks'; // // 드로어 열고 닫는 상태 관리용 훅
 import { Flex, Box, Container, Drawer, Button } from '@mantine/core';
 import { UploadImageButton } from '../upload-image/UploadImageBtn';
 import { FloatingIndicator, UnstyledButton } from '@mantine/core';
