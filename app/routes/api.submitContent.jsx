@@ -42,7 +42,23 @@ export const action = async ({ context, request }) => {
             createdAt: createdAt,
         });
     } else if (contentType === 3) {
-        console.log('Existing URL! ');
+        const url = formData.get('url');
+        console.log('Uploading URL. URL:', url);
+
+        // Validate the URL format (you can use a regex or a library for better validation)
+        const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+        if (!urlRegex.test(url)) {
+            return json({
+                success: false,
+                message: 'Invalid URL format',
+            });
+        }
+        await addContent({
+            urlId: urlID,
+            content: url, // Store the URL in the content field
+            contentType: contentType,
+            createdAt: createdAt,
+        });
     }
 
     return json({ success: true, contenType: contentType });
