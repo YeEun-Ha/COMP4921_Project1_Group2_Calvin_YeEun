@@ -6,7 +6,7 @@ export const action = async ({ request }) => {
 
     try{
         const urlKey = await generateUrlKey();
-        // console.log('received url key --> ', urlKey);
+        console.log('received url key --> ', urlKey);
         return json ({
             success: true,
             generatedURL: urlKey

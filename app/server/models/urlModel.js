@@ -62,8 +62,37 @@ export async function updateHit(shortUrl) {
 }
 
 export const generateUrlKey = async () => {
-    //ddd
-    const [dbRows] = await db.query('SELECT generate_url_friendly_pk() AS url_key;');
-    console.log('successfully created an url:', dbRows);
-    return dbRows[0].url_key;
+    const connection = await db.getConnection(); // connection pool에서 새 연결을 가져옵니다.
+
+    try{
+        await connection.beginTransaction();
+        await connection.query('LOCK TABLES url WRITE');
+
+        // MySQL stored function을 통해 URL 키 생성
+        const [dbRows] = await connection.query('SELECT generate_url_friendly_pk() AS url_key;');
+        const urlKey = dbRows[0].url_key;
+
+        // 생성된 URL 키가 중복인지 확인
+        const [existingRows] = await connection.query('SELECT 1 FROM url WHERE url_id = ?', [urlKey]);
+        if (existingRows.length > 0) {
+             throw new Error('URL key already exists');
+        }
+
+        await connection.query('UNLOCK TABLES');
+        await connection.commit();
+
+        console.log('성공적으로 URL 키 생성:', urlKey);
+        return urlKey;
+    
+    } catch (error) {
+        await connection.rollback();
+        console.error('URL 키 생성 실패:', error);
+        throw error;
+
+    } finally {
+        connection.release();
+    }
+    // const [dbRows] = await db.query('SELECT generate_url_friendly_pk() AS url_key;');
+    // console.log('successfully created an url:', dbRows);
+    // return dbRows[0].url_key;
 }
