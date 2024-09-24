@@ -55,7 +55,6 @@ export const action = async ({ context, request }) => {
                 message: 'Invalid URL format',
             });
         }
-
         await addContent({
             urlId: urlID,
             content: url, 
