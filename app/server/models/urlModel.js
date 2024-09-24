@@ -62,6 +62,7 @@ export async function updateHit(shortUrl) {
 }
 
 export const generateUrlKey = async () => {
+    //ddd
     const [dbRows] = await db.query('SELECT generate_url_friendly_pk() AS url_key;');
     console.log('successfully created an url:', dbRows);
     return dbRows[0].url_key;
