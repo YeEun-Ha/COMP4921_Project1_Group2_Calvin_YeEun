@@ -28,8 +28,19 @@ VALUES(:urlId, :content, :contentType, :hits, :active, :created_at, :last_hit, 1
 
 export async function getContent() {
     let getData = `
-        SELECT url_id, content, content_type_id, hits, active, created_at, last_hit, user_id
-        FROM url;
+        SELECT u.url_id, 
+    c.type_name AS content_type_id, 
+    u.content,
+    u.hits, 
+    u.active, 
+    u.created_at, 
+    u.last_hit, 
+    u.user_id
+FROM url u
+JOIN 
+    content_type c USING (content_type_id)
+ORDER BY 
+    u.created_at DESC;
         `;
     try {
         const results = await db.query(getData);

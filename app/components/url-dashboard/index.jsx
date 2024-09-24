@@ -106,17 +106,19 @@ export default function URLDashboard({ loaderData }) {
                                                 {dbRow.content_type_id}
                                             </Table.Td>
                                             <Table.Td>
+                                                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '150px' }}>
                                                 {dbRow.content}
+                                                </div>
                                             </Table.Td>
                                             <Table.Td>{dbRow.hits}</Table.Td>
                                             <Table.Td>
                                                 {dbRow.active ? 'Yes' : 'No'}
                                             </Table.Td>
                                             <Table.Td>
-                                                {dbRow.created_at}
+                                                {dbRow.created_at.split('T')[0]}
                                             </Table.Td>
                                             <Table.Td>
-                                                {dbRow.last_hit}
+                                                {dbRow.last_hit.split('T')[0]}
                                             </Table.Td>
                                         </Table.Tr>
                                     ))}

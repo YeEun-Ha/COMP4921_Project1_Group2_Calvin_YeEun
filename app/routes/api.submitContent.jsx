@@ -18,8 +18,10 @@ export const action = async ({ context, request }) => {
 
     console.log(`from request, formData--->`, formData);
     const contentType = Number(formData.get('contentType'));
-    const createdAt = new Date(Date.now()).toISOString().split('T')[0];
+    // const createdAt = new Date(Date.now()).toISOString().split('T')[0];
+    const createdAt = new Date(Date.now());
     console.log('contentType-->', contentType);
+    console.log('createdAt-->', createdAt);
     const urlID = formData.get('urlID')
 
     if (contentType === 1) {
@@ -53,9 +55,10 @@ export const action = async ({ context, request }) => {
                 message: 'Invalid URL format',
             });
         }
+
         await addContent({
             urlId: urlID,
-            content: url, // Store the URL in the content field
+            content: url, 
             contentType: contentType,
             createdAt: createdAt,
         });
