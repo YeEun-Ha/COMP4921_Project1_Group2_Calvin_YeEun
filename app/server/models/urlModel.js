@@ -60,3 +60,9 @@ export async function updateHit(shortUrl) {
         // res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 }
+
+export const generateUrlKey = async () => {
+    const [dbRows] = await db.query('SELECT generate_url_friendly_pk() AS url_key;');
+    console.log('successfully created an url:', dbRows);
+    return dbRows[0].url_key;
+}

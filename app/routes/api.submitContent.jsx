@@ -7,7 +7,8 @@ export const action = async ({ context, request }) => {
     const formData = await request.formData();
     // const userId = context.session.userId;
     const userId = 1;
-    console.log(context);
+    console.log('from request, context--->', context);
+
     // const username = context.session.username;
     // const authenticated = context.session.authenticated;
     // const result = await getUser({ username: username });
@@ -15,9 +16,12 @@ export const action = async ({ context, request }) => {
     // if (!authenticated)
     //     return json({ success: false, message: 'unauthenticated request' });
 
+    console.log(`from request, formData--->`, formData);
     const contentType = Number(formData.get('contentType'));
     const createdAt = new Date(Date.now()).toISOString().split('T')[0];
-    console.log(contentType);
+    console.log('contentType-->', contentType);
+    const urlID = formData.get('urlID')
+
     if (contentType === 1) {
         console.log('Uploading image...');
         const imageFile = formData.get('file');
@@ -28,10 +32,11 @@ export const action = async ({ context, request }) => {
             });
         cloudinary.uploadFile(imageFile, 'file');
     } else if (contentType === 2) {
-        console.log('Uploading text content');
-        const data = formData.get('text');
+        const data = formData.get('text'); 
+        console.log('Uploading text content. data:', data);
+
         const result = await addContent({
-            urlId: data,
+            urlId: urlID,
             content: data,
             contentType: contentType,
             createdAt: createdAt,

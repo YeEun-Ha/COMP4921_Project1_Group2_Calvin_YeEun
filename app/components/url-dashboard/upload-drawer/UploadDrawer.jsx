@@ -51,6 +51,23 @@ export function UploadDrawer() {
             formData.append('url', content);
         }
         formData.append('contentType', active);
+        console.log('F12: after appending.. formData:', formData);
+
+        try{
+            const url = await fetch('/generateUrl', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                // body: JSON.stringify({}) // empty object 
+            });
+            const urlData = await url.json();
+            console.log('F12: fetched url data', urlData.generatedURL);  
+            formData.append('urlID', urlData.generatedURL)
+            
+        } catch(error) {
+            console.log(error);
+            console.error('Error fetching url:', error);
+        }
+
         try {
             fetcher.submit(
                 formData, // Your form data

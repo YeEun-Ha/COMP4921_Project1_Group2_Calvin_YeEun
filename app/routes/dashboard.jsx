@@ -4,7 +4,7 @@ import { getContent } from '../server/models/urlModel';
 import { json } from '@remix-run/react';
 
 export const loader = async () => {
-    console.log('SSS');
+    console.log('Start-- /dashboard - data loader');
     const data = await getContent(); // Fetch the data from your database
     return json({ table: data }); // Return the data as a JSON response
     // return data
