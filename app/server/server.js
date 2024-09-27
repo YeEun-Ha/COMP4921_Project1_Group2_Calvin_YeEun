@@ -29,6 +29,16 @@ app.use(
     viteDevServer ? viteDevServer.middlewares : express.static('build/client')
 );
 
+console.log(
+    MongoStore.create({
+        mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@cluster0.dqd1fyd.mongodb.net/sessions`, // update with your actual MongoDB connection strin
+        ttl: 14 * 24 * 60 * 60, // Sessions will expire after 14 days (in seconds)
+        crypto: {
+            secret: mongodb_session_secret,
+        },
+    })
+);
+
 app.use(
     session({
         secret: node_session_secret,
