@@ -3,9 +3,9 @@ import db from '../database';
 export const addContent = async (postData) => {
     const addContentSQL = `INSERT INTO url (url_id, user_id, content, content_type_id, hits, active, created_at, last_hit) 
 VALUES(:urlId, :userId, :content, :contentTypeId, :hits, :active, :created_at, :last_hit)`;
-
+    console.log(postData);
     const params = {
-        urlId: postData.urlID,
+        urlId: postData.urlId,
         userId: postData.userId,
         content: postData.content,
         contentTypeId: postData.contentTypeId,
