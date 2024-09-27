@@ -6,6 +6,7 @@ export async function createTables() {
         await seedContentTypeTable();
         await createUserTable();
         await createURLTable();
+        await createURLPKStoredFunction();
     } catch (e) {
         console.log('Error creating tables');
         return false;
@@ -74,6 +75,41 @@ export async function seedContentTypeTable() {
         console.log(err);
         console.log('Error inserting content type tables');
 
+        return false;
+    }
+}
+
+export async function createURLPKStoredFunction() {
+    const createFunctionSQL = `
+CREATE FUNCTION check_and_generate_hash(p_value VARCHAR(255)) 
+RETURNS VARCHAR(10) DETERMINISTIC 
+BEGIN 
+    DECLARE v_count INT; 
+    DECLARE v_hash VARCHAR(10); 
+
+    -- Check if the value already exists in the table 
+    SELECT COUNT(*) INTO v_count 
+    FROM url 
+    WHERE url_id = p_value; 
+
+    -- If it exists, throw an error 
+    IF v_count > 0 THEN 
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Value already exists in the table'; 
+    ELSE 
+        -- If it does not exist, generate a 10-character hash 
+        SET v_hash = SUBSTRING(MD5(p_value), 1, 10); 
+        RETURN v_hash; 
+    END IF; 
+END;
+`;
+
+    try {
+        const results = await db.query(createFunctionSQL); // Make sure db.query returns a promise
+        console.log('Successfully created URL stored function');
+    } catch (err) {
+        console.log('Error creating URL stored function');
+        console.log(err);
         return false;
     }
 }
