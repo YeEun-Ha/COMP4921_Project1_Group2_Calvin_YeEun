@@ -41,6 +41,10 @@ app.use(
         }),
         saveUninitialized: false,
         resave: false,
+        cookie: {
+            secure: process.env.NODE_ENV === 'production', // set secure cookies in production
+            sameSite: 'lax', // or 'strict' depending on your needs
+        },
     })
 );
 
@@ -52,6 +56,7 @@ app.all(
     '*',
     createRequestHandler({
         getLoadContext(req) {
+            console.log('Session in production:', req.session);
             return { session: req.session };
         },
         build: build,
