@@ -39,6 +39,25 @@ console.log(
     })
 );
 
+app.use((req, res, next) => {
+    console.log('Before session middleware:', req.url);
+    next();
+});
+
+const mongoStore = MongoStore.create({
+    mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@cluster0.dqd1fyd.mongodb.net/sessions`, // your MongoDB connection string
+    ttl: 14 * 24 * 60 * 60, // Sessions will expire after 14 days (in seconds)
+    crypto: {
+        secret: mongodb_session_secret,
+    },
+})
+    .on('connected', () => {
+        console.log('MongoStore connected');
+    })
+    .on('error', (error) => {
+        console.error('MongoStore connection error:', error);
+    });
+
 app.use(
     session({
         secret: node_session_secret,
@@ -57,6 +76,11 @@ app.use(
         },
     })
 );
+
+app.use((req, res, next) => {
+    console.log('After session middleware:', req.session);
+    next();
+});
 
 const build = viteDevServer
     ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
