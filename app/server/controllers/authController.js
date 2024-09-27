@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { getUser } from '../models/usersModel';
-import { SALT_ROUNDS, COOKIE_EXPIRY } from '../utils/constants';
+import { SALT_ROUNDS, COOKIE_EXPIRE } from '../utils/constants';
 
 export const postLogin = async (userPayload) => {
     const username = userPayload.username;
@@ -24,7 +24,7 @@ export const postLogin = async (userPayload) => {
         return {
             userID: user[0].user_id,
             username: user[0]?.username,
-            expiry: COOKIE_EXPIRY,
+            expiry: COOKIE_EXPIRE,
         };
     }
 
