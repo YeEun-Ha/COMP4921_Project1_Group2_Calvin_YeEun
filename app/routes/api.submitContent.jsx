@@ -5,24 +5,20 @@ import { addContent } from '../server/models/urlModel.js';
 
 export const action = async ({ context, request }) => {
     const formData = await request.formData();
-    // const userId = context.session.userId;
-    const userId = 1;
-    console.log('from request, context--->', context);
+    const userId = context.session.userId;
 
-    // const username = context.session.username;
-    // const authenticated = context.session.authenticated;
+    const username = context.session.username;
+    const authenticated = context.session.authenticated;
     // const result = await getUser({ username: username });
 
-    // if (!authenticated)
-    //     return json({ success: false, message: 'unauthenticated request' });
+    if (!authenticated)
+        return json({ success: false, message: 'unauthenticated request' });
 
     console.log(`from request, formData--->`, formData);
     const contentType = Number(formData.get('contentType'));
     // const createdAt = new Date(Date.now()).toISOString().split('T')[0];
     const createdAt = new Date(Date.now());
-    console.log('contentType-->', contentType);
-    console.log('createdAt-->', createdAt);
-    const urlID = formData.get('urlID')
+    const urlID = formData.get('urlID');
 
     if (contentType === 1) {
         console.log('Uploading image...');
@@ -34,18 +30,18 @@ export const action = async ({ context, request }) => {
             });
         cloudinary.uploadFile(imageFile, 'file');
     } else if (contentType === 2) {
-        const data = formData.get('text'); 
+        const data = formData.get('text');
         console.log('Uploading text content. data:', data);
 
         const result = await addContent({
             urlId: urlID,
+            userId: userId,
             content: data,
-            contentType: contentType,
+            contentTypeId: contentType,
             createdAt: createdAt,
         });
     } else if (contentType === 3) {
         const url = formData.get('url');
-        console.log('Uploading URL. URL:', url);
 
         // Validate the URL format (you can use a regex or a library for better validation)
         const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -57,7 +53,8 @@ export const action = async ({ context, request }) => {
         }
         await addContent({
             urlId: urlID,
-            content: url, 
+            userId: userId,
+            content: url,
             contentType: contentType,
             createdAt: createdAt,
         });
