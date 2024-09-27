@@ -2,11 +2,11 @@ import db from '.';
 
 export async function createTables() {
     try {
-        await createContentTypeTable();
-        await seedContentTypeTable();
-        await createUserTable();
-        await createURLTable();
-        await createURLPKStoredFunction();
+        // await createContentTypeTable();
+        // await seedContentTypeTable();
+        // await createUserTable();
+        // await createURLTable();
+        // await createURLPKStoredFunction();
     } catch (e) {
         console.log('Error creating tables');
         return false;
