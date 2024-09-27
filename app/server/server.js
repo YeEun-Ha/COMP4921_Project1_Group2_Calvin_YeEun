@@ -15,7 +15,7 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.SESSION_SECRET;
 
 const viteDevServer =
-    process.env.NODE_ENV === 'production'
+    process.env.PRODUCTION === 'production'
         ? null
         : await import('vite').then((vite) =>
               vite.createServer({
@@ -27,16 +27,6 @@ const app = express();
 
 app.use(
     viteDevServer ? viteDevServer.middlewares : express.static('build/client')
-);
-
-console.log(
-    MongoStore.create({
-        mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@cluster0.dqd1fyd.mongodb.net/sessions`, // update with your actual MongoDB connection strin
-        ttl: 14 * 24 * 60 * 60, // Sessions will expire after 14 days (in seconds)
-        crypto: {
-            secret: mongodb_session_secret,
-        },
-    })
 );
 
 app.use((req, res, next) => {
@@ -79,6 +69,7 @@ app.use(
 
 app.use((req, res, next) => {
     console.log('After session middleware:', req.session);
+    console.error('sss');
     next();
 });
 
