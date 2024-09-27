@@ -23,6 +23,8 @@ const viteDevServer =
               })
           );
 
+console.log(viteDevServer)
+
 const app = express();
 
 app.use(
