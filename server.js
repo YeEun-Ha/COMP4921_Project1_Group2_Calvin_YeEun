@@ -15,20 +15,14 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.SESSION_SECRET;
 
 async function startServer() {
-    // const viteDevServer =
-    //     process.env.NODE_ENV === 'production'
-    //         ? null
-    //         : await import('vite').then((vite) =>
-    //               vite.createServer({
-    //                   server: { middlewareMode: true },
-    //               })
-    //           );
-    //
-    const viteDevServer = null;
-    console.log(
-        'Vite Dev Server:',
-        viteDevServer ? 'Running in dev mode' : 'Production mode'
-    );
+    const viteDevServer =
+        process.env.NODE_ENV === 'production'
+            ? null
+            : await import('vite').then((vite) =>
+                  vite.createServer({
+                      server: { middlewareMode: true },
+                  })
+              );
 
     const app = express();
 
@@ -40,20 +34,17 @@ async function startServer() {
         })
     );
 
-    // Use Vite's middleware in development, otherwise serve static files in production
     app.use(
         viteDevServer
             ? viteDevServer.middlewares
             : express.static('build/client')
     );
 
-    // Log before session middleware
     app.use((req, res, next) => {
         console.log('Before session middleware:', req.url);
         next();
     });
 
-    // Set up MongoStore once and use it
     const mongoStore = MongoStore.create({
         mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@cluster0.dqd1fyd.mongodb.net/sessions`, // your MongoDB connection string
         ttl: 14 * 24 * 60 * 60, // Sessions will expire after 14 days (in seconds)
@@ -70,7 +61,6 @@ async function startServer() {
         console.error('MongoStore connection error:', error);
     });
 
-    // Set up session middleware
     app.use(
         session({
             secret: node_session_secret,

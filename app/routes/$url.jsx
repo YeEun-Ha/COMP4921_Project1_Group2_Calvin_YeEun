@@ -1,12 +1,17 @@
+import { useForm } from '@mantine/form';
 import { useParams, useFetcher } from '@remix-run/react';
 import { useEffect } from 'react';
+
 export default function URLContent() {
     const params = useParams();
     const fetcher = useFetcher();
 
     useEffect(() => {
-        console.log(params);
         const url = params.url;
+
+        let formData = new FormData();
+
+        formData.append('url', url);
 
         fetcher.submit(
             formData, // Your form data
