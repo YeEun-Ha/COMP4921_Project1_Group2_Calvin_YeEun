@@ -20,8 +20,22 @@ export const action = async ({ request, context }) => {
         context.session.username = result.username;
         context.session.authenticated = true;
         context.session.cookie.maxAge = result.expiry;
-        console.log(context);
-        return json({ success: true, message: 'User successfully logged in' });
+        return new Promise((resolve, reject) => {
+            request.session.save((err) => {
+                if (err) {
+                    console.error('Session save error:', err);
+                    return reject(err);
+                }
+                console.log('Session saved successfully.');
+                // Respond after session is saved
+                resolve(
+                    json({
+                        success: true,
+                        message: 'User successfully logged in',
+                    })
+                );
+            });
+        });
     }
     return null;
 };

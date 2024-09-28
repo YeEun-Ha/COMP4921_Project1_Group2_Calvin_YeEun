@@ -31,6 +31,7 @@ async function startServer() {
 
     const app = express();
 
+    app.set('trust proxy', 1); // Trust the first proxy
     // Use Vite's middleware in development, otherwise serve static files in production
     app.use(
         viteDevServer
@@ -53,13 +54,13 @@ async function startServer() {
         },
     });
 
-    mongoStore.on('connected', () => {
-        console.log('MongoStore connected');
-    });
-
-    mongoStore.on('error', (error) => {
-        console.error('MongoStore connection error:', error);
-    });
+    // mongoStore.on('connected', () => {
+    //     console.log('MongoStore connected');
+    // });
+    //
+    // mongoStore.on('error', (error) => {
+    //     console.error('MongoStore connection error:', error);
+    // });
 
     // Set up session middleware
     app.use(
@@ -97,7 +98,6 @@ async function startServer() {
             build: build,
         })
     );
-    console.log('HELLO');
     app.listen(PORT, () => {
         console.log(`App listening on http://localhost:${PORT}`);
     });
