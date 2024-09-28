@@ -3,7 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
 
 dotenv.config();
 
@@ -34,6 +34,7 @@ async function startServer() {
 
     app.use(
         cors({
+            domain: 'https://comp4921-project1-group2-calvin-yeeun.onrender.com',
             credentials: true, // Allow cookies to be sent
         })
     );
@@ -104,7 +105,6 @@ async function startServer() {
             build: build,
         })
     );
-    console.log('HELLO');
     app.listen(PORT, () => {
         console.log(`App listening on http://localhost:${PORT}`);
     });

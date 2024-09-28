@@ -8,7 +8,6 @@ export const postLogin = async (userPayload) => {
 
     // const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS);
     const user = await getUser({ username });
-    console.log(user);
 
     if (!user) {
         return false;
