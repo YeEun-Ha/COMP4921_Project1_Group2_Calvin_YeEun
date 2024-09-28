@@ -48,7 +48,6 @@
         "recharts": "^2.12.7",
         "cross-env": "^7.0.3",
         "postcss": "^8.4.47",
-        "postcss-preset-mantine": "^1.17.0",
         "postcss-simple-vars": "^7.0.1",
         "@remix-run/dev": "^2.11.2",
         "vite": "^5.1.0"
