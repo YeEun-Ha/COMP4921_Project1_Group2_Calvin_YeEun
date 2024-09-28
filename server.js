@@ -31,6 +31,12 @@ async function startServer() {
 
     const app = express();
 
+    app.use(
+        cors({
+            credentials: true, // Allow cookies to be sent
+        })
+    );
+
     // Use Vite's middleware in development, otherwise serve static files in production
     app.use(
         viteDevServer
