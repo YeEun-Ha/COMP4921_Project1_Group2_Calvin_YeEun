@@ -32,6 +32,7 @@ async function startServer() {
 
     const app = express();
 
+    app.set('trust proxy', 1); // Trust the first proxy
     app.use(
         cors({
             domain: 'https://comp4921-project1-group2-calvin-yeeun.onrender.com',
