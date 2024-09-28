@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { createUser } from '../models/usersModel.js';
 import { SALT_ROUNDS } from '../utils/constants.js';
 

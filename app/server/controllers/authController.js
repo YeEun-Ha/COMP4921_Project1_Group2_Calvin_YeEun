@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { getUser } from '../models/usersModel';
 import { SALT_ROUNDS, COOKIE_EXPIRE } from '../utils/constants';
 

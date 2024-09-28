@@ -1,7 +1,6 @@
 import { createRequestHandler } from '@remix-run/express';
 import express from 'express';
 import session from 'express-session';
-import bcrypt from 'bcrypt';
 import MongoStore from 'connect-mongo';
 import dotenv from 'dotenv';
 
