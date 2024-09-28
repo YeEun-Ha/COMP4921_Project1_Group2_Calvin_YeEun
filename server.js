@@ -35,7 +35,7 @@ async function startServer() {
     app.set('trust proxy', 1); // Trust the first proxy
     app.use(
         cors({
-            domain: 'https://comp4921-project1-group2-calvin-yeeun.onrender.com',
+            origin: 'https://comp4921-project1-group2-calvin-yeeun.onrender.com',
             credentials: true, // Allow cookies to be sent
         })
     );
