@@ -8,7 +8,7 @@
         "dev": "remix vite:dev",
         "dev-server": "node ./app/server/server.js",
         "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-        "start": "remix-serve ./build/index.js",
+        "start": "remix-serve ./build/server/index.js",
         "start-server": "cross-env NODE_ENV=production node ./app/server/server.js"
     },
     "dependencies": {
