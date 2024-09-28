@@ -14,15 +14,16 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.SESSION_SECRET;
 
 async function startServer() {
-    const viteDevServer =
-        process.env.NODE_ENV === 'production'
-            ? null
-            : await import('vite').then((vite) =>
-                  vite.createServer({
-                      server: { middlewareMode: true },
-                  })
-              );
-
+    // const viteDevServer =
+    //     process.env.NODE_ENV === 'production'
+    //         ? null
+    //         : await import('vite').then((vite) =>
+    //               vite.createServer({
+    //                   server: { middlewareMode: true },
+    //               })
+    //           );
+    //
+    const viteDevServer = null;
     console.log(
         'Vite Dev Server:',
         viteDevServer ? 'Running in dev mode' : 'Production mode'
@@ -96,7 +97,7 @@ async function startServer() {
             build: build,
         })
     );
-
+    console.log('HELLO');
     app.listen(PORT, () => {
         console.log(`App listening on http://localhost:${PORT}`);
     });
