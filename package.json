@@ -9,7 +9,7 @@
         "dev-server": "node ./app/server/server.js",
         "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
         "start": "remix-serve ./build/server/index.js",
-        "start-prod": "PORT=3000 cross-env NODE_ENV=production node ./build/server/index.js",
+        "start-prod": "cross-env NODE_ENV=production node ./server.js",
         "start-server": "cross-env NODE_ENV=production node ./app/server/server.js"
     },
     "dependencies": {
