@@ -5,7 +5,7 @@ export async function createTables() {
         // await createContentTypeTable();
         // await seedContentTypeTable();
         // await createUserTable();
-        // await createURLTable();
+        await createURLTable();
         // await createURLPKStoredFunction();
     } catch (e) {
         console.log('Error creating tables');
