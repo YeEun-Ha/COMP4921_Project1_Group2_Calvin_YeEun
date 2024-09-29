@@ -6,7 +6,7 @@
     "scripts": {
         "build": "remix vite:build",
         "dev": "remix vite:dev",
-        "dev-server": "node ./app/server/server.js",
+        "dev-server": "node ./server.js",
         "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
         "start": "remix-serve ./build/server/index.js",
         "start-prod": "cross-env NODE_ENV=production node ./server.js",
