@@ -52,23 +52,21 @@ export function UploadDrawer() {
         }
         formData.append('contentType', active);
 
-        try {
-            formData.append('urlID', content);
-        } catch (error) {
-            console.log(error);
-            console.error('Error fetching url:', error);
-        }
+        formData.append('urlID', content);
 
         try {
             fetcher.submit(
                 formData, // Your form data
-                { method: 'post', action: '/api/submitContent' } // The action route
+                {
+                    method: 'post',
+                    action: '/api/submitContent',
+                    encType: 'multipart/form-data',
+                } // The action route
             );
         } catch (error) {
-            console.log(error);
-            console.error('Error submitting content:', error);
+            throw new Error('ERROR ');
         }
-        close();
+        // close();
     };
 
     useEffect(() => {

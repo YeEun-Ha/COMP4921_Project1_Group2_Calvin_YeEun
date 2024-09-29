@@ -20,17 +20,24 @@ export const action = async ({ context, request }) => {
     const urlID = formData.get('urlID');
 
     if (contentType === 1) {
-        console.log('Uploading image...');
         const imageFile = formData.get('file');
-        if (imageFile instanceof File)
+        if (!(imageFile instanceof Blob) || !(imageFile instanceof File)) {
             return json({
                 success: false,
                 message: 'Uploaded image is not a valid file type',
             });
-        cloudinary.uploadFile(imageFile, 'file');
+        }
+        const uploadResult = await cloudinary.uploadFile(imageFile, 'file');
+
+        await addContent({
+            urlId: uploadResult,
+            userId: userId,
+            content: uploadResult,
+            contentTypeId: contentType,
+            createdAt: createdAt,
+        });
     } else if (contentType === 2) {
         const data = formData.get('text');
-        console.log('Uploading text content. data:', data);
 
         const result = await addContent({
             urlId: urlID,
@@ -59,8 +66,4 @@ export const action = async ({ context, request }) => {
     }
 
     return json({ success: true, contenType: contentType });
-    //insert data to mysql table
-
-    // if an image, upload to cloudinary
-    // insert to mysql table for users
 };

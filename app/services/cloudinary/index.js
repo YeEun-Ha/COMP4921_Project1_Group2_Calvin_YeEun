@@ -23,7 +23,6 @@ class CloudinaryClient {
         };
 
         try {
-            // Upload the image
             const result = await this.client.uploader.upload(
                 imagePath,
                 options
@@ -38,18 +37,29 @@ class CloudinaryClient {
     async uploadFile(file, fileType = 'raw') {
         // Specify the resource type based on the file type being uploaded
         const buffer = await this.streamToBuffer(file);
-        const options = {
-            use_filename: true,
-            unique_filename: false,
-            overwrite: true,
-            resource_type: fileType, // 'raw' for files (e.g., PDF, ZIP), 'video' for video files
-        };
 
         try {
-            const result = Cloudinary.v2.uploader
-                .upload_stream({ resource_type: 'image' })
-                .end(buffer);
-            return result.public_id;
+            const result = new Promise((resolve, reject) => {
+                const stream = Cloudinary.v2.uploader.upload_stream(
+                    { resource_type: 'image', use_filename: true },
+                    (error, result) => {
+                        if (error) {
+                            console.error(
+                                'Error uploading to Cloudinary:',
+                                error
+                            );
+                            return reject(error); // Reject the promise if there's an error
+                        }
+
+                        console.log('Upload successful:', result); // Log the result from Cloudinary
+                        resolve(result?.url);
+                    }
+                );
+
+                stream.end(buffer); // Pass the buffer to the stream and signal the end of the stream
+            });
+
+            return result;
         } catch (error) {
             console.error('Error uploading file to Cloudinary:', error);
             throw error;

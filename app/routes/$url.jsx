@@ -4,13 +4,14 @@ import { getContentItem } from '../server/controllers/dashbordController';
 import { json } from '@remix-run/node'; // Ensure this import is from Remix node
 import {
     Box,
-    Group,
     Text,
+    Group,
     Image,
     Loader,
     Center,
     Paper,
     Title,
+    Stack,
 } from '@mantine/core';
 
 export const loader = async ({ request, params }) => {
@@ -24,10 +25,15 @@ export default function URLContent() {
     const navigate = useNavigate(); // Hook to handle redirects
     const [countdown, setCountdown] = useState(5); // State to manage countdown
 
+    const isActive = data.data.active;
+
     useEffect(() => {
-        if (data.data.content_type_id === 3) {
+        if (
+            data.data.active &&
+            (data.data.content_type_id === 3 || data.data.content_type_id === 1)
+        ) {
             const intervalId = setInterval(() => {
-                setCountdown((prevCount) => prevCount - 1); // Decrease countdown every second
+                setCountdown((prevCount) => prevCount - 1);
             }, 1000);
 
             const timeoutId = setTimeout(() => {
@@ -39,9 +45,8 @@ export default function URLContent() {
                 clearTimeout(timeoutId); // Cleanup timeout
             };
         }
-    }, [data.data.content_type_id, data.data.content]);
+    }, [data.data.active, data.data.content_type_id, data.data.content]);
 
-    // Display common metadata for all content types
     const contentMetadata = (
         <Box
             mt='md'
@@ -68,30 +73,71 @@ export default function URLContent() {
         </Box>
     );
 
-    // Conditionally render based on the content_type_id
-    if (data.data.content_type_id === 1) {
-        // Display image
+    if (data.data && !isActive) {
         return (
             <Center>
                 <Paper shadow='xs' padding='md' radius='md' withBorder>
-                    <Title align='center' color='teal' order={2}>
-                        View your Image Content
+                    <Title align='center' color='red' order={2}>
+                        The resouce you are trying to access is currently not
+                        active!
                     </Title>
-                    <Image
-                        src={data.data.content}
-                        alt='User Content'
-                        fit='contain'
-                        width={400}
-                        height={300}
-                    />
-                    {contentMetadata}
                 </Paper>
             </Center>
         );
     }
 
+    if (data.data)
+        if (data.data.content_type_id === 1) {
+            return (
+                <Center>
+                    <Paper
+                        w='60%'
+                        shadow='xs'
+                        padding='md'
+                        radius='md'
+                        withBorder
+                    >
+                        <Title align='center' c='blue' order={2}>
+                            Redirecting to image in {countdown} seconds...
+                        </Title>
+                        <Center p='40'>
+                            <Loader m='5' size='md' />
+                        </Center>
+                        <Center></Center>
+                        <Center mt='md'>
+                            <Text align='center' size='md'>
+                                or click{' '}
+                                <a
+                                    href={data.data.content}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                    style={{
+                                        color: 'blue',
+                                        textDecoration: 'underline',
+                                    }}
+                                >
+                                    here
+                                </a>{' '}
+                                to go now
+                            </Text>
+                        </Center>
+                        <Title mt='30' align='center' color='teal' order={2}>
+                            Preview Image
+                        </Title>
+                        <Image
+                            src={data.data.content}
+                            alt='User Content'
+                            fit='contain'
+                            width={400}
+                            height={300}
+                        />
+                        {contentMetadata}
+                    </Paper>
+                </Center>
+            );
+        }
+
     if (data.data.content_type_id === 2) {
-        // Display text content
         return (
             <Center>
                 <Paper
@@ -158,7 +204,6 @@ export default function URLContent() {
         );
     }
 
-    // Fallback for unknown content types
     return (
         <Center>
             <Paper shadow='xs' padding='md' radius='md' withBorder>
