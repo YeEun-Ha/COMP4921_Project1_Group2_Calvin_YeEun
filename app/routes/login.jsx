@@ -16,7 +16,7 @@ export const action = async ({ request, context }) => {
     const result = await postLogin(userPayload);
     if (result) {
         console.log('Login successfuly');
-        context.session.userId = result.userID;
+        context.session.userId = Number(result.userID);
         context.session.username = result.username;
         context.session.authenticated = true;
         context.session.cookie.maxAge = result.expiry;

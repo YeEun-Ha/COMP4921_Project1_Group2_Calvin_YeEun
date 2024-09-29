@@ -1,4 +1,8 @@
-import { getUrlContent, getUrlContents } from '../models/urlModel';
+import {
+    updateUrlContentStatus,
+    getUrlContent,
+    getUrlContents,
+} from '../models/urlModel';
 
 export const getContentList = async () => {
     try {
@@ -18,6 +22,18 @@ export const getContentItem = async (payload) => {
     } catch (err) {
         console.error('Error getting content');
 
+        return null;
+    }
+};
+
+export const updateContentStatus = async (payload) => {
+    try {
+        const { urlId, userId, active } = payload;
+
+        const data = await updateUrlContentStatus(urlId, userId, active);
+        return data;
+    } catch (err) {
+        console.log('Error updating url status');
         return null;
     }
 };

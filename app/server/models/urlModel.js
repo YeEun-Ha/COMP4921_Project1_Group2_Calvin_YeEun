@@ -19,7 +19,7 @@ export const addContent = async (postData) => {
         content: postData.content,
         contentTypeId: postData.contentTypeId,
         hits: 0,
-        active: true,
+        active: 1,
         created_at: postData.createdAt,
         last_hit: postData.createdAt,
     };
@@ -92,5 +92,27 @@ export async function updateHit(shortUrl) {
     } catch (error) {
         console.error(`Error updating hits:`, error);
         // res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+export async function updateUrlContentStatus(urlId, userId, active) {
+    const updateUrlContentStatus = `UPDATE url SET active = :active WHERE url_id = :urlId AND user_id = :userId`;
+
+    console.log(active);
+    console.log(urlId);
+    console.log(userId);
+    const params = {
+        urlId,
+        userId,
+        active,
+    };
+
+    try {
+        const result = await db.query(updateUrlContentStatus, params);
+        console.log(result);
+        return result;
+    } catch (err) {
+        console.error('Error updating URL content:', err);
+        throw new Error('Failed to update URL content status');
     }
 }
