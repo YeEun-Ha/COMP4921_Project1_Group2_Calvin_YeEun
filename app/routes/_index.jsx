@@ -1,14 +1,17 @@
 import HomePage from '../components/home';
 import { createTables } from '../server/database/create_tables';
+import { json, useLoaderData } from '@remix-run/react';
 
-export const loader = async () => {
+export const loader = async ({ context }) => {
+    const authenticated = context.authenticated;
     console.log('Create tables');
 
     await createTables();
 
-    return null;
+    return json({ authenticated });
 };
 
 export default function Index() {
-    return <HomePage />;
+    const { authenticated } = useLoaderData();
+    return <HomePage authenticated={authenticated} />;
 }

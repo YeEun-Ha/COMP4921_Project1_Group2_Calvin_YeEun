@@ -25,7 +25,7 @@ export default function URLContent() {
     const navigate = useNavigate(); // Hook to handle redirects
     const [countdown, setCountdown] = useState(5); // State to manage countdown
 
-    const isActive = data.data.active;
+    const isActive = data?.data?.active;
 
     useEffect(() => {
         if (

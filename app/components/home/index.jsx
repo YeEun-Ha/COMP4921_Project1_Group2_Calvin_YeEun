@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react';
 import { Title, Text, Button, Container } from '@mantine/core';
 import classes from './home.module.css';
 
-export default function HomePage() {
+export default function HomePage({ authenticated }) {
     return (
         <Container className={classes.wrapper} size={1400}>
             <div className={classes.inner}>
@@ -24,31 +24,63 @@ export default function HomePage() {
                     </Text>
                 </Container>
 
-                <Container p={0} size={600}>
-                    <Text size='lg' c='dimmed' className={classes.description}>
-                        Sign up or Login to an existing account to get started!
-                    </Text>
-                </Container>
-                <div className={classes.controls}>
-                    <Button
-                        variant='default'
-                        size='lg'
-                        className={classes.control}
-                        component={Link}
-                        to='/login'
-                    >
-                        Log in
-                    </Button>
-                    <Button
-                        variant='default'
-                        size='lg'
-                        className={classes.control}
-                        component={Link}
-                        to='/signup'
-                    >
-                        Sign up
-                    </Button>
-                </div>
+                {authenticated ? (
+                    <>
+                        <Container p={0} size={600}>
+                            <Text
+                                size='lg'
+                                c='dimmed'
+                                className={classes.description}
+                            >
+                                Sign up or Login to an existing account to get
+                                started!
+                            </Text>
+                        </Container>
+                        <div className={classes.controls}>
+                            <Button
+                                variant='default'
+                                size='lg'
+                                className={classes.control}
+                                component={Link}
+                                to='/login'
+                            >
+                                Log in
+                            </Button>
+                            <Button
+                                variant='default'
+                                size='lg'
+                                className={classes.control}
+                                component={Link}
+                                to='/signup'
+                            >
+                                Sign up
+                            </Button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <Container p={0} size={600}>
+                            <Text
+                                size='lg'
+                                c='dimmed'
+                                className={classes.description}
+                            >
+                                Visit the dashboard now to get started!
+                            </Text>
+                        </Container>
+                        <div className={classes.controls}>
+                            <Button
+                                variant='default'
+                                size='lg'
+                                className={classes.control}
+                                component={Link}
+                                to='/dashboard'
+                            >
+                                View Dashboard
+                            </Button>
+                        </div>
+                    </>
+                )}
             </div>
         </Container>
     );
