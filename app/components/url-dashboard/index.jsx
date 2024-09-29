@@ -3,12 +3,14 @@ import { Box, Stack, Table, ScrollArea, Group, Button } from '@mantine/core';
 import classes from './url-dashboard.module.css';
 import { useState, useEffect } from 'react';
 import { UploadDrawer } from './upload-drawer/UploadDrawer';
+import { useNavigate } from '@remix-run/react';
 
 export default function URLDashboard({ loaderData }) {
     const [scrolled, setScrolled] = useState(false);
     const table = loaderData?.table?.[0] ?? [];
     // console.log("successful until loaderData:", table)
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
+    const navigate = useNavigate();
 
     // Function to update the hit count when a URL is clicked
     const handleLinkClick = async (shortUrl, index) => {
@@ -25,13 +27,19 @@ export default function URLDashboard({ loaderData }) {
             setData((prevData) =>
                 prevData.map((row, i) =>
                     i === index
-                        ? { ...row, hits: fetchedData.hits, last_hit: fetchedData.lastHit }
+                        ? {
+                              ...row,
+                              hits: fetchedData.hits,
+                              last_hit: fetchedData.lastHit,
+                          }
                         : row
                 )
             );
         } else {
             console.log('Failed to update hits.');
         }
+
+        navigate(`/${shortUrl}`);
     };
 
     useEffect(() => {
@@ -92,7 +100,7 @@ export default function URLDashboard({ loaderData }) {
                                                     target='_blank'
                                                     rel='noopener noreferrer'
                                                     onClick={(e) => {
-                                                        // e.preventDefault();
+                                                        e.preventDefault();
                                                         handleLinkClick(
                                                             dbRow.url_id,
                                                             index
@@ -106,8 +114,16 @@ export default function URLDashboard({ loaderData }) {
                                                 {dbRow.content_type_id}
                                             </Table.Td>
                                             <Table.Td>
-                                                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '150px' }}>
-                                                {dbRow.content}
+                                                <div
+                                                    style={{
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        textOverflow:
+                                                            'ellipsis',
+                                                        maxWidth: '150px',
+                                                    }}
+                                                >
+                                                    {dbRow.content}
                                                 </div>
                                             </Table.Td>
                                             <Table.Td>{dbRow.hits}</Table.Td>

@@ -3,8 +3,7 @@ import db from '../database';
 export const addContent = async (postData) => {
     const addContentSQL = `
     INSERT INTO url 
-    (url_id, user_id, content, content_type_id, hits, active, created_at, last_hit) 
-    VALUES (
+    (url_id, user_id, content, content_type_id, hits, active, created_at, last_hit) VALUES (
         check_and_generate_hash(:urlId), 
         :userId, 
         :content, 
@@ -36,7 +35,7 @@ export const addContent = async (postData) => {
     }
 };
 
-export async function getContent() {
+export async function getUrlContents() {
     let getData = `
     SELECT u.url_id, 
            c.content_id AS content_type_id, 
@@ -56,6 +55,21 @@ export async function getContent() {
         return results;
     } catch (err) {
         console.error('Error fetching data from MySQL:', err);
+    }
+}
+
+export async function getUrlContent(urlID) {
+    const urlContent = `
+SELECT * FROM url WHERE url_id = :urlID
+`;
+    const params = {
+        urlID: urlID,
+    };
+    try {
+        const result = await db.query(urlContent, params);
+        return result[0][0];
+    } catch (err) {
+        console.error('Error fetching url content from SQL');
     }
 }
 

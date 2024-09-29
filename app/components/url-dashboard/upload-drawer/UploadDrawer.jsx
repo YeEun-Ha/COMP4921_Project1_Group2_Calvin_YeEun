@@ -51,15 +51,8 @@ export function UploadDrawer() {
             formData.append('url', content);
         }
         formData.append('contentType', active);
-        console.log('F12: after appending.. formData:', formData);
 
         try {
-            // const url = await fetch('/generateUrl', {
-            //     method: 'POST',
-            //     headers: {'Content-Type': 'application/json'},
-            //     // body: JSON.stringify({}) // empty object
-            // });
-            // const urlData = await url.json();
             formData.append('urlID', content);
         } catch (error) {
             console.log(error);
@@ -71,23 +64,19 @@ export function UploadDrawer() {
                 formData, // Your form data
                 { method: 'post', action: '/api/submitContent' } // The action route
             );
-
-            // const response = await fetch('/api/submitContent', {
-            //     method: 'POST',
-            //     body: formData,
-            // });
         } catch (error) {
             console.log(error);
             console.error('Error submitting content:', error);
         }
         close();
     };
+
     useEffect(() => {
         if (fetcher.state === 'idle' && fetcher.type === 'done') {
-            // Submission is done, now load the table data
             fetcher.load('/dashboard');
         }
     }, [fetcher]);
+
     return (
         <>
             <Drawer

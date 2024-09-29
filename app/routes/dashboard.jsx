@@ -1,11 +1,11 @@
 import URLDashboard from '../components/url-dashboard';
 import { useLoaderData } from '@remix-run/react';
-import { getContent } from '../server/models/urlModel';
+import { getContentList } from '../server/controllers/dashbordController';
 import { json } from '@remix-run/react';
 
 export const loader = async () => {
     console.log('Start-- /dashboard - data loader');
-    const data = await getContent(); // Fetch the data from your database
+    const data = await getContentList(); // Fetch the data from your database
     return json({ table: data }); // Return the data as a JSON response
     // return data
 };

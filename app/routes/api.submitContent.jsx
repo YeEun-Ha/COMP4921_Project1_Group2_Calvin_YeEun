@@ -14,7 +14,6 @@ export const action = async ({ context, request }) => {
     if (!authenticated)
         return json({ success: false, message: 'unauthenticated request' });
 
-    console.log(`from request, formData--->`, formData);
     const contentType = Number(formData.get('contentType'));
     // const createdAt = new Date(Date.now()).toISOString().split('T')[0];
     const createdAt = new Date(Date.now());
@@ -43,7 +42,6 @@ export const action = async ({ context, request }) => {
     } else if (contentType === 3) {
         const url = formData.get('url');
 
-        // Validate the URL format (you can use a regex or a library for better validation)
         const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
         if (!urlRegex.test(url)) {
             return json({
@@ -55,7 +53,7 @@ export const action = async ({ context, request }) => {
             urlId: urlID,
             userId: userId,
             content: url,
-            contentType: contentType,
+            contentTypeId: contentType,
             createdAt: createdAt,
         });
     }
