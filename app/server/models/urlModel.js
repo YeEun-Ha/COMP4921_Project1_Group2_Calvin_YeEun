@@ -38,7 +38,7 @@ export const addContent = async (postData) => {
 export async function getUrlContents() {
     let getData = `
     SELECT u.url_id, 
-           c.content_id AS content_type_id, 
+           c.content_type AS content_type_id, 
            u.content,
            u.hits, 
            u.active, 

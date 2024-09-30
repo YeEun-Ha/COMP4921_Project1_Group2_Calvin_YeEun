@@ -83,14 +83,13 @@ export default function URLDashboard({ loaderData }) {
     }, [table]);
 
 
-    // 필터링된 데이터를 계산하는 함수
     const filteredData = data.filter((row) => {
-        if (filterType === null) return true; // 필터가 없으면 전체 데이터를 보여줌
+        if (filterType === null) return true; 
         return row.content_type_id === filterType;
     });
 
     const handleFilter = (type) => {
-        setFilterType(type); // 필터 타입을 변경
+        setFilterType(type); 
     };
 
     return (
