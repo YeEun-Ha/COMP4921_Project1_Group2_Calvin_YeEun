@@ -10,22 +10,32 @@ export const postLogin = async (userPayload) => {
     const user = await getUser({ username });
 
     if (!user) {
-        return false;
+        return {
+            success: false,
+            message: `The user ${username} does not exist`,
+        };
     }
 
     if (user.length != 1) {
-        return false;
+        return {
+            success: false,
+            message: `The user ${username} does not exist`,
+        };
     }
 
     const hashedPassword = user[0].password;
 
     if (bcrypt.compareSync(password, hashedPassword)) {
         return {
+            success: true,
             userID: user[0].user_id,
             username: user[0]?.username,
             expiry: COOKIE_EXPIRE,
         };
     }
 
-    return false;
+    return {
+        success: false,
+        message: `Invalid username and/or pasword combination`,
+    };
 };

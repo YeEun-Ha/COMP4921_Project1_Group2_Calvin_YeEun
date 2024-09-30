@@ -1,8 +1,8 @@
-import { json } from '@remix-run/react';
 import { useActionData, useNavigate } from '@remix-run/react';
 import { SignUpForm } from '../components/signup';
 import { signUpUser } from '../server/controllers/userController';
 import { useEffect, useState } from 'react';
+import { json } from '@remix-run/node';
 
 export const loader = async () => {
     return null;
@@ -19,13 +19,7 @@ export const action = async ({ request }) => {
     };
 
     const result = await signUpUser(payload);
-
-    if (result.success) {
-        console.log('GOOD');
-        return json({ success: true });
-    }
-
-    return json({ success: false, error: 'Sign up failed' }, { status: 400 });
+    return json({ ...result });
 };
 
 export default function SignUpPage() {
@@ -33,23 +27,15 @@ export default function SignUpPage() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [isPopoverOpen, setOpen] = useState(false);
-
     useEffect(() => {
         if (actionData?.success) {
             setLoading(false);
-            navigate('/dashboard');
-        } else if (actionData?.error) {
+            navigate('/login');
+        } else if (actionData?.errors) {
             setOpen(true);
             setLoading(false);
         }
     }, [actionData, navigate]);
 
-    return (
-        <SignUpForm
-            loading={loading}
-            setLoading={setLoading}
-            open={isPopoverOpen}
-            setOpen={setOpen}
-        ></SignUpForm>
-    );
+    return <SignUpForm actionData={actionData}></SignUpForm>;
 }

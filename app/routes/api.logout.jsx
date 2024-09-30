@@ -1,21 +1,18 @@
-export async function action({ request, context }) {
-    // Get the session from context (where you've passed `req.session`)
-    const { req } = context;
+import { redirect, json } from '@remix-run/node';
 
-    return new Promise((resolve, reject) => {
-        req.session.destroy((err) => {
-            if (err) {
-                return reject(new Error('Failed to destroy session'));
-            }
+export const action = async ({ request, context }) => {
+    const formData = await request.formData();
+    const userId = formData.get('userId');
 
-            // Redirect after session destruction
-            resolve(
-                redirect('/login', {
-                    headers: {
-                        'Set-Cookie': '', // Clear the session cookie
-                    },
-                })
-            );
-        });
-    });
-}
+    if (context.session.userId == userId && context.session.authenticated) {
+        context.session
+            .destroy()
+            .then(() => {
+                redirect('/');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    return null;
+};

@@ -12,8 +12,12 @@ import {
 } from '@mantine/core';
 import { Form } from '@remix-run/react';
 import classes from './login.module.css';
+import LogAlert from '../common/alert';
+import { useState } from 'react';
 
-export function LoginForm() {
+export function LoginForm({ actionData }) {
+    const [showAlert, setShowAlert] = useState(false);
+
     return (
         <Container size={420} my={40}>
             <Title ta='center' className={classes.title}>
@@ -51,6 +55,26 @@ export function LoginForm() {
                     </Button>
                 </Paper>
             </Form>
+
+            {!actionData?.success && actionData?.message ? (
+                <LogAlert
+                    showAlert={true}
+                    message={actionData?.message}
+                    color={'red'}
+                />
+            ) : (
+                <></>
+            )}
+
+            {actionData?.success == true && actionData?.message ? (
+                <LogAlert
+                    showAlert={true}
+                    message={actionData?.message}
+                    color={'teal'}
+                />
+            ) : (
+                <></>
+            )}
         </Container>
     );
 }

@@ -1,8 +1,18 @@
 import { Link } from '@remix-run/react';
 import { Title, Text, Button, Container } from '@mantine/core';
 import classes from './home.module.css';
+import { useState, useEffect } from 'react';
+import LogAlert from '../common/alert';
 
 export default function HomePage({ authenticated }) {
+    const [showAlert, setShowAlert] = useState(false);
+
+    useEffect(() => {
+        if (!authenticated) {
+            setShowAlert(true);
+        }
+    }, [authenticated]);
+
     return (
         <Container className={classes.wrapper} size={1400}>
             <div className={classes.inner}>

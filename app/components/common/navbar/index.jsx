@@ -41,8 +41,8 @@ export default function Navbar({ userId, authenticated }) {
     const handleLogout = async () => {
         const formData = new FormData();
 
-        if (authenticated) return;
-
+        if (!authenticated) return;
+        console.log(userId);
         formData.append('userId', userId);
 
         try {

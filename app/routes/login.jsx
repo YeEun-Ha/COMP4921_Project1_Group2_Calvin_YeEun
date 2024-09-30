@@ -14,7 +14,7 @@ export const action = async ({ request, context }) => {
     };
 
     const result = await postLogin(userPayload);
-    if (result) {
+    if (result?.success) {
         console.log('Login successfuly');
         context.session.userId = Number(result.userID);
         context.session.username = result.username;
@@ -22,7 +22,7 @@ export const action = async ({ request, context }) => {
         context.session.cookie.maxAge = result.expiry;
         return json({ success: true, message: 'User successfully logged in' });
     }
-    return null;
+    return json({ success: false, message: result?.message });
 };
 
 export default function LoginPage() {
@@ -34,5 +34,5 @@ export default function LoginPage() {
             navigate('/dashboard');
         }
     }, [actionData, navigate]);
-    return <LoginForm></LoginForm>;
+    return <LoginForm actionData={actionData}></LoginForm>;
 }

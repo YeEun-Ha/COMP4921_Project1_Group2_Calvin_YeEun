@@ -47,11 +47,10 @@ export function Layout({ children }) {
 
 export default function App() {
     const { userId, authenticated } = useLoaderData();
-    console.log(authenticated);
     return (
         <MantineProvider>
             <Flex direction='column' style={{ minHeight: '100vh' }}>
-                <Navbar authenticated={authenticated} />
+                <Navbar userId={userId} authenticated={authenticated} />
                 <div style={{ flexGrow: 1 }}>
                     <Outlet />{' '}
                 </div>
