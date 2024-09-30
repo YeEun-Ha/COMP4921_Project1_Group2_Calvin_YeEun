@@ -24,6 +24,8 @@ export default function URLDashboard({ loaderData }) {
 
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
     const [baseURL, setBaseUrl] = useState('');
+    const [filterType, setFilterType] = useState(null); 
+
 
     const handleActiveStatus = async (urlId, userId, activeStatus) => {
         const formData = new FormData();
@@ -80,6 +82,17 @@ export default function URLDashboard({ loaderData }) {
         setData(table);
     }, [table]);
 
+
+    // 필터링된 데이터를 계산하는 함수
+    const filteredData = data.filter((row) => {
+        if (filterType === null) return true; // 필터가 없으면 전체 데이터를 보여줌
+        return row.content_type_id === filterType;
+    });
+
+    const handleFilter = (type) => {
+        setFilterType(type); // 필터 타입을 변경
+    };
+
     return (
         <>
             <Box className={classes.tablecontainer} my={25}>
@@ -92,9 +105,12 @@ export default function URLDashboard({ loaderData }) {
                     <Stack w={'90%'}>
                         <Group justify='space-between'>
                             <Group>
-                                <Button variant='default'>Filter Links</Button>
-                                <Button variant='default'>Filter Images</Button>
-                                <Button variant='default'>Filter Text</Button>
+                                <Button variant='default' onClick={() => handleFilter(3)}>Links</Button>
+                                <Button variant='default' onClick={() => handleFilter(1)}>Images</Button>
+                                <Button variant='default' onClick={() => handleFilter(2)}>Texts</Button>
+                                <Button variant='default' onClick={() => handleFilter(null)}>
+                                    Reset Filter
+                                </Button>
                             </Group>
                             <Group>
                                 {' '}
@@ -131,7 +147,7 @@ export default function URLDashboard({ loaderData }) {
                                     </Table.Tr>
                                 </Table.Thead>
                                 <Table.Tbody>
-                                    {data.map((dbRow, index) => {
+                                    {filteredData.map((dbRow, index) => {
                                         const isOwner =
                                             dbRow.user_id === userId;
                                         return (
