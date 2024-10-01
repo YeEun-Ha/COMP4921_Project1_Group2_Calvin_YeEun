@@ -34,7 +34,7 @@ export default function HomePage({ authenticated }) {
                     </Text>
                 </Container>
 
-                {authenticated ? (
+                {!authenticated ? (
                     <>
                         <Container p={0} size={600}>
                             <Text

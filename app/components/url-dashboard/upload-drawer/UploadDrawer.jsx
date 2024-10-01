@@ -143,10 +143,6 @@ export function UploadDrawer() {
                 ) : (
                     <></>
                 )}
-
-                <Container my={30}>
-                    <h3>Generated URL: </h3>
-                </Container>
             </Drawer>
 
             <Button onClick={open}>Upload New item</Button>
