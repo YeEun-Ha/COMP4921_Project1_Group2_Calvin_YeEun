@@ -123,8 +123,8 @@ CREATE TABLE IF NOT EXISTS url (
     content_type_id INT NOT NULL, 
     hits INT NOT NULL,
     active BOOL NOT NULL,
-    created_at DATE NOT NULL,     -- renamed 'create' to 'created_at'
-    last_hit DATE NOT NULL,
+    created_at datetime NOT NULL,     -- renamed 'create' to 'created_at'
+    last_hit datetime NOT NULL,
     PRIMARY KEY (url_id),
     FOREIGN KEY (content_type_id) REFERENCES content_type(content_id)
 );
