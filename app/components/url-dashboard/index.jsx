@@ -23,7 +23,7 @@ export default function URLDashboard({ loaderData }) {
     const userId = loaderData?.userId;
 
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
-    // console.log(`table -->`, table)
+    console.log(`table -->`, table)
     const [baseURL, setBaseUrl] = useState('');
     const [filterType, setFilterType] = useState(null);
 
@@ -188,7 +188,7 @@ export default function URLDashboard({ loaderData }) {
                                                     </a>
                                                 </Table.Td>
                                                 <Table.Td>
-                                                    {dbRow.userId}
+                                                    {dbRow.username}
                                                 </Table.Td>
                                                 <Table.Td>
                                                     {dbRow.content_type_id}
