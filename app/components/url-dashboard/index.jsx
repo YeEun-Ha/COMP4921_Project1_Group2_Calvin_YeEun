@@ -23,6 +23,7 @@ export default function URLDashboard({ loaderData }) {
     const userId = loaderData?.userId;
 
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
+    // console.log(`table -->`, table)
     const [baseURL, setBaseUrl] = useState('');
     const [filterType, setFilterType] = useState(null);
 
@@ -80,15 +81,16 @@ export default function URLDashboard({ loaderData }) {
     useEffect(() => {
         setData(table);
     }, [table]);
+    
 
-    const filteredData = data.filter((row) => {
-        if (filterType === null) return true;
-        return row.content_type_id === filterType;
-    });
-
+    const filteredData = filterType 
+    ? data.filter((row) => row.content_type_id === filterType) 
+    : data;
+    
     const handleFilter = (type) => {
         setFilterType(type);
     };
+
 
     return (
         <>
@@ -104,19 +106,19 @@ export default function URLDashboard({ loaderData }) {
                             <Group>
                                 <Button
                                     variant='default'
-                                    onClick={() => handleFilter(3)}
+                                    onClick={() => handleFilter(`URL`)}
                                 >
                                     Links
                                 </Button>
                                 <Button
                                     variant='default'
-                                    onClick={() => handleFilter(1)}
+                                    onClick={() => handleFilter(`Image`)}
                                 >
                                     Images
                                 </Button>
                                 <Button
                                     variant='default'
-                                    onClick={() => handleFilter(2)}
+                                    onClick={() => handleFilter(`Text`)}
                                 >
                                     Texts
                                 </Button>
