@@ -24,8 +24,7 @@ export default function URLDashboard({ loaderData }) {
 
     const [data, setData] = useState(table ?? []); // Initialize state with fetched data
     const [baseURL, setBaseUrl] = useState('');
-    const [filterType, setFilterType] = useState(null); 
-
+    const [filterType, setFilterType] = useState(null);
 
     const handleActiveStatus = async (urlId, userId, activeStatus) => {
         const formData = new FormData();
@@ -82,14 +81,13 @@ export default function URLDashboard({ loaderData }) {
         setData(table);
     }, [table]);
 
-
     const filteredData = data.filter((row) => {
-        if (filterType === null) return true; 
+        if (filterType === null) return true;
         return row.content_type_id === filterType;
     });
 
     const handleFilter = (type) => {
-        setFilterType(type); 
+        setFilterType(type);
     };
 
     return (
@@ -104,10 +102,28 @@ export default function URLDashboard({ loaderData }) {
                     <Stack w={'90%'}>
                         <Group justify='space-between'>
                             <Group>
-                                <Button variant='default' onClick={() => handleFilter(3)}>Links</Button>
-                                <Button variant='default' onClick={() => handleFilter(1)}>Images</Button>
-                                <Button variant='default' onClick={() => handleFilter(2)}>Texts</Button>
-                                <Button variant='default' onClick={() => handleFilter(null)}>
+                                <Button
+                                    variant='default'
+                                    onClick={() => handleFilter(3)}
+                                >
+                                    Links
+                                </Button>
+                                <Button
+                                    variant='default'
+                                    onClick={() => handleFilter(1)}
+                                >
+                                    Images
+                                </Button>
+                                <Button
+                                    variant='default'
+                                    onClick={() => handleFilter(2)}
+                                >
+                                    Texts
+                                </Button>
+                                <Button
+                                    variant='default'
+                                    onClick={() => handleFilter(null)}
+                                >
                                     Reset Filter
                                 </Button>
                             </Group>
@@ -136,6 +152,7 @@ export default function URLDashboard({ loaderData }) {
                                 >
                                     <Table.Tr>
                                         <Table.Th>URL</Table.Th>
+                                        <Table.Th>Username</Table.Th>
                                         <Table.Th>Content Type</Table.Th>
                                         <Table.Th>Content Preview</Table.Th>
                                         <Table.Th>Hits</Table.Th>
@@ -167,6 +184,9 @@ export default function URLDashboard({ loaderData }) {
                                                         {baseURL}
                                                         {dbRow.url_id}
                                                     </a>
+                                                </Table.Td>
+                                                <Table.Td>
+                                                    {dbRow.userId}
                                                 </Table.Td>
                                                 <Table.Td>
                                                     {dbRow.content_type_id}

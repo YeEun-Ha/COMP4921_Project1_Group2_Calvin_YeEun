@@ -10,12 +10,13 @@ import {
     Group,
     Button,
 } from '@mantine/core';
-import { Form } from '@remix-run/react';
+import { Form, useNavigate } from '@remix-run/react';
 import classes from './login.module.css';
 import LogAlert from '../common/alert';
 import { useState } from 'react';
 
 export function LoginForm({ actionData }) {
+    const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
 
     return (
@@ -25,7 +26,11 @@ export function LoginForm({ actionData }) {
             </Title>
             <Text c='dimmed' size='sm' ta='center' mt={5}>
                 Do not have an account yet?{' '}
-                <Anchor size='sm' component='button'>
+                <Anchor
+                    size='sm'
+                    component='button'
+                    onClick={() => navigate('/signup')}
+                >
                     Create account
                 </Anchor>
             </Text>
@@ -44,12 +49,6 @@ export function LoginForm({ actionData }) {
                         required
                         mt='md'
                     />
-                    <Group justify='space-between' mt='lg'>
-                        <Checkbox label='Remember me' />
-                        <Anchor component='button' size='sm'>
-                            Forgot password?
-                        </Anchor>
-                    </Group>
                     <Button type='submit' fullWidth mt='xl'>
                         Sign In
                     </Button>

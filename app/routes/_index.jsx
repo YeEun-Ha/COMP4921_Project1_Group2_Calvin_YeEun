@@ -3,10 +3,13 @@ import { createTables } from '../server/database/create_tables';
 import { json, useLoaderData } from '@remix-run/react';
 
 export const loader = async ({ context }) => {
-    const authenticated = context.session?.authenticated;
     console.log('Create tables');
     await createTables();
-
+    console.log(context);
+    if (context?.session?.authenticated == null) {
+        return json({ authenticated: false });
+    }
+    const authenticated = context.session?.authenticated;
     return json({ authenticated });
 };
 

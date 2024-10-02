@@ -5,14 +5,13 @@ export const action = async ({ request, context }) => {
     const userId = formData.get('userId');
 
     if (context.session.userId == userId && context.session.authenticated) {
-        context.session
-            .destroy()
-            .then(() => {
-                redirect('/');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        try {
+            await context.session.destroy(); // Ensure the session is destroyed first
+            return redirect('/'); // Return the redirect after session destruction
+        } catch (err) {
+            console.log(err);
+            return json({ success: false });
+        }
     }
     return null;
 };

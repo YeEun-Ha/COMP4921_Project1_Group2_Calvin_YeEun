@@ -18,7 +18,7 @@ import { Form, useNavigate, useActionData } from '@remix-run/react';
 import LogAlert from '../common/alert';
 
 export function SignUpForm({ actionData }) {
-    console.log(actionData);
+    const navigate = useNavigate();
     return (
         <Container size={420} my={40}>
             <Title ta='center' className={classes.title}>
@@ -26,7 +26,11 @@ export function SignUpForm({ actionData }) {
             </Title>
             <Text c='dimmed' size='sm' ta='center' mt={5}>
                 Already have an account?{' '}
-                <Anchor size='sm' component='button'>
+                <Anchor
+                    size='sm'
+                    component='button'
+                    onClick={() => navigate('/login')}
+                >
                     Sign In
                 </Anchor>
             </Text>
