@@ -73,8 +73,8 @@ export default function Navbar({ userId, authenticated }) {
                             Dashboard
                         </a>
 
-                        <a href='/settings' className={classes.link}>
-                            Settings
+                        <a href='/explore' className={classes.link}>
+                            Explore
                         </a>
                     </Group>
 
