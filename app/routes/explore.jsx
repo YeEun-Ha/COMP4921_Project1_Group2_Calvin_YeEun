@@ -24,11 +24,7 @@ export default function ExplorePage() {
     const contentList = useLoaderData(); // Fetch the data from the loader
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
+        return date.toISOString().slice(0, 10); // Get YYYY-MM-DD format
     };
     return (
         <Container py='xl'>
